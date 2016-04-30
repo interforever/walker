@@ -1,4 +1,4 @@
-package com.maxtop.core.json;
+package com.maxtop.walker.core.json;
 
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;

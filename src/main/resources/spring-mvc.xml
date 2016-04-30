@@ -23,12 +23,12 @@
 			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="prettyPrint" value="true"/>
                 <property name="objectMapper">
-					<bean class="com.maxtop.core.json.ObjectMapperWrapper">
+					<bean class="com.maxtop.walker.core.json.ObjectMapperWrapper">
 						<property name="serializerFactory">
-							<bean class="com.maxtop.core.json.BeanSerializerFactoryWrapper"/>
+							<bean class="com.maxtop.walker.core.json.BeanSerializerFactoryWrapper"/>
 						</property>
 						<property name="serializerProvider">
-							<bean class="com.maxtop.core.json.SerializerProviderWrapper"/>
+							<bean class="com.maxtop.walker.core.json.SerializerProviderWrapper"/>
 						</property>
 					</bean>
 				</property>

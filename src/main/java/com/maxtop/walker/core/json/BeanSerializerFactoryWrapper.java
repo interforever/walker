@@ -1,5 +1,5 @@
 
-package com.maxtop.core.json;
+package com.maxtop.walker.core.json;
 
 import java.util.ArrayList;
 import java.util.List;
