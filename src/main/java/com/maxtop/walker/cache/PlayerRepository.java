@@ -12,9 +12,10 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.maxtop.walker.model.Player;
 import com.maxtop.walker.service.PlayerService;
-import com.maxtop.walker.vo.Player;
 
 @Service
 public class PlayerRepository implements InitializingBean, DisposableBean {
@@ -29,13 +30,18 @@ public class PlayerRepository implements InitializingBean, DisposableBean {
 	private PlayerService playerService;
 	
 	private void refresh() {
-		clear();
+		logger.info("Start refreshing players!");
 		List<Player> players = playerService.list();
-		for (Player player : players) {
-			playerMap.put(player.getPlayerid(), player);
-			telIdMap.put(player.getTel(), player.getPlayerid());
+		if (CollectionUtils.isEmpty(players)) {
+			logger.info("Refresh players failed!");
+		} else {
+			clear();
+			for (Player player : players) {
+				playerMap.put(player.getPlayerid(), player);
+				telIdMap.put(player.getTel(), player.getPlayerid());
+			}
+			logger.info("Refreshing " + playerMap.size() + " players successfully!");
 		}
-		if (logger.isDebugEnabled()) logger.debug("Sum of players: " + playerMap.size());
 	}
 	
 	private void clear() {

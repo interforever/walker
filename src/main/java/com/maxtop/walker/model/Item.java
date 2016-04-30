@@ -1,5 +1,5 @@
 
-package com.maxtop.walker.vo;
+package com.maxtop.walker.model;
 
 public class Item {
 	

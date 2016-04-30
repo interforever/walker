@@ -1,5 +1,5 @@
 
-package com.maxtop.walker.vo;
+package com.maxtop.walker.model;
 
 public class Player {
 	
@@ -40,6 +40,8 @@ public class Player {
 	private String showForPlayer;
 	
 	private String description;
+	
+	private Integer audience;
 	
 	public String getStatus() {
 		return status;
@@ -191,6 +193,14 @@ public class Player {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Integer getAudience() {
+		return audience;
+	}
+	
+	public void setAudience(Integer audience) {
+		this.audience = audience;
 	}
 	
 }

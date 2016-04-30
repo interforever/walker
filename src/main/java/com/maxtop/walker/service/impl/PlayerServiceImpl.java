@@ -2,6 +2,7 @@
 package com.maxtop.walker.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,30 +10,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.maxtop.walker.cache.PlayerRepository;
+import com.maxtop.walker.model.Player;
 import com.maxtop.walker.service.HttpClientService;
 import com.maxtop.walker.service.PlayerService;
-import com.maxtop.walker.vo.Player;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
 	
 	@Value("${player.list.url:http://114.80.120.78:9999/api/v1/player/money/rank}")
-	private String PLAYER_LIST_URL;
+	private String playerListUrl;
+	
+	@Value("${player.audience.count.url:http://114.80.120.78:9999/api/v1/zb/online/user}")
+	private String playerAudienceCountUrl;
 	
 	@Autowired
 	private HttpClientService httpClientService;
 	
+	@Autowired
+	private PlayerRepository playerRepository;
+	
 	public List<Player> list() {
 		List<Player> players = new ArrayList<Player>();
 		@SuppressWarnings("unchecked")
-		Map<String, Object> map = (Map<String, Object>) httpClientService.executeService(PLAYER_LIST_URL, null);
+		Map<String, Object> map = (Map<String, Object>) httpClientService.executeGetService(playerListUrl, null);
 		if (!"0".equals((String) map.get("code"))) return null;
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> playerMaps = (List<Map<String, Object>>) map.get("data");
 		for (Map<String, Object> playerMap : playerMaps) {
 			Player player = new Player();
 			player.setStatus((String) playerMap.get("status"));
-			player.setMoneyRank((Integer) playerMap.get("moneyRank"));
+			if (playerMap.get("moneyRank") != null) player.setMoneyRank(((Number) playerMap.get("moneyRank")).intValue());
 			player.setTel((String) playerMap.get("tel"));
 			player.setName((String) playerMap.get("name"));
 			player.setTudou((String) playerMap.get("tudou"));
@@ -41,7 +49,7 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setMoney((String) playerMap.get("money"));
 			player.setZburl((String) playerMap.get("zburl"));
 			player.setJail_time((String) playerMap.get("jail_time"));
-			player.setRank((Integer) playerMap.get("rank"));
+			if (playerMap.get("rank") != null) player.setRank(((Number) playerMap.get("rank")).intValue());
 			player.setShowForUser((String) playerMap.get("showForUser"));
 			player.setRole((String) playerMap.get("role"));
 			player.setAvatar((String) playerMap.get("avatar"));
@@ -51,8 +59,22 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setShowForPlayer((String) playerMap.get("showForPlayer"));
 			player.setDescription((String) playerMap.get("description"));
 			players.add(player);
+			Map<String, String> serviceParam = new HashMap<String, String>();
+			serviceParam.put("zbid", player.getZbid());
+			@SuppressWarnings("unchecked")
+			Map<String, Object> audienceMap = (Map<String, Object>) httpClientService.executeGetService(playerAudienceCountUrl, serviceParam);
+			if (((Number) audienceMap.get("code")).intValue() != 0) continue;
+			@SuppressWarnings("unchecked")
+			Map<String, Object> audienceCountMap = (Map<String, Object>) audienceMap.get("data");
+			if (audienceCountMap.get("count") != null) player.setAudience(((Number) audienceCountMap.get("count")).intValue());
 		}
 		return players;
+	}
+	
+	public void update(String playerid, Map<String, Object> parameters) {
+		
+		if (parameters.containsKey("role"))
+		;
 	}
 	
 }

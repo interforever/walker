@@ -1,14 +1,22 @@
 
 package com.maxtop.walker.controller;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maxtop.walker.cache.PlayerItemRepository;
 import com.maxtop.walker.cache.PlayerRepository;
-import com.maxtop.walker.vo.Player;
+import com.maxtop.walker.model.Player;
+import com.maxtop.walker.service.PlayerService;
 
 @RestController
 @RequestMapping(value = "/player")
@@ -17,9 +25,40 @@ public class PlayerController {
 	@Autowired
 	private PlayerRepository playerRepository;
 	
-	@RequestMapping("/list")
-	public Collection<Player> getList() {
-		return playerRepository.list();
+	@Autowired
+	private PlayerItemRepository playItemRepository;
+	
+	@Autowired
+	private PlayerService playerService;
+	
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public Map<String, List<Map<String, Object>>> getList() {
+		Map<String, List<Map<String, Object>>> data = new HashMap<String, List<Map<String, Object>>>();
+		for (Player player : playerRepository.list()) {
+			List<Map<String, Object>> list = data.get(player.getRole());
+			if (list == null) {
+				list = new ArrayList<Map<String, Object>>();
+				data.put(player.getRole(), list);
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("player", player);
+			map.put("items", playItemRepository.getItemsById(player.getPlayerid()));
+			list.add(map);
+		}
+		return data;
+	}
+	
+	@RequestMapping(value = "/playerid/{tel}", method = RequestMethod.GET)
+	public String getPlayeridByTel(@PathVariable String tel) {
+		for (Player player : playerRepository.list()) {
+			if (tel.equals(player.getTel())) return player.getPlayerid();
+		}
+		return null;
+	}
+	
+	@RequestMapping(value = "/playerid/{playerid}", method = RequestMethod.POST)
+	public void updatePlayer(@PathVariable String playerid, @RequestBody Map<String, Object> parameters) {
+		playerService.update(playerid, parameters);
 	}
 	
 }

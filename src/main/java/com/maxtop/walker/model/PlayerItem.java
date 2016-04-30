@@ -1,5 +1,5 @@
 
-package com.maxtop.walker.vo;
+package com.maxtop.walker.model;
 
 public class PlayerItem {
 	
@@ -27,7 +27,11 @@ public class PlayerItem {
 	
 	private String categoryName;
 	
-	private Item item;
+	private Integer price;
+	
+	private String picUrl;
+	
+	private String labelName;
 	
 	public Integer getCategoryId() {
 		return categoryId;
@@ -125,12 +129,28 @@ public class PlayerItem {
 		this.categoryName = categoryName;
 	}
 	
-	public Item getItem() {
-		return item;
+	public Integer getPrice() {
+		return price;
 	}
 	
-	public void setItem(Item item) {
-		this.item = item;
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	
+	public String getPicUrl() {
+		return picUrl;
+	}
+	
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
+	}
+	
+	public String getLabelName() {
+		return labelName;
+	}
+	
+	public void setLabelName(String labelName) {
+		this.labelName = labelName;
 	}
 	
 }
