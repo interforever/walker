@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxtop.walker.dao.SettingDao">
+	<resultMap id="BaseResultMap" type="com.maxtop.walker.model.Setting">
+		<result column="centerLng" property="centerLng" jdbcType="VARCHAR" />
+		<result column="centerLat" property="centerLat" jdbcType="VARCHAR" />
+		<result column="radius" property="radius" jdbcType="INTEGER" />
+		<result column="warningSwitch" property="warningSwitch" jdbcType="VARCHAR" />
+		<result column="warningDistance" property="warningDistance" jdbcType="INTEGER" />
+		<result column="mul" property="mul" jdbcType="DOUBLE" />
+		<result column="add" property="add" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="getSettings" resultType="com.maxtop.walker.model.Setting">
+		select centerLng, centerLat, radius, warningSwitch, warningDistance, mul, `add` from t_setting
+	</select>
+</mapper>
