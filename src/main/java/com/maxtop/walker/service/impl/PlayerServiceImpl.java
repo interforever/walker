@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.model.Player;
@@ -26,6 +27,15 @@ public class PlayerServiceImpl implements PlayerService {
 	
 	@Value("${player.audience.avatar.url:http://114.80.120.78:9999/api/v1/online/user}")
 	private String playerAudienceAvatarUrl;
+	
+	@Value("${player.audience.avatar.limit:20}")
+	private Integer playerAudienceAvatarLimit;
+	
+	@Value("${audience.faker.avatar.url:http://static.youku.com/user/img/avatar/50/}")
+	private String audienceFakerAvatarUrl;
+	
+	@Value("${audience.faker.avatar.count:57}")
+	private Integer audienceFakerAvatarCount;
 	
 	@Autowired
 	private HttpClientService httpClientService;
@@ -73,15 +83,25 @@ public class PlayerServiceImpl implements PlayerService {
 		}
 		return players;
 	}
-
+	
 	public List<String> getAudienceAvatars(String playerid) {
-	    return null;
-    }
+		int audienceCount = playerRepository.getById(playerid).getAudience();
+		if (audienceCount < playerAudienceAvatarLimit) audienceCount = playerAudienceAvatarLimit;
+		List<String> urls = new ArrayList<String>();
+		for (int i = 0; i < audienceCount; i++) {
+			int avatarId = (int) (Math.random() * audienceFakerAvatarCount) + 1;
+			urls.add(audienceFakerAvatarUrl + avatarId + ".jpg");
+		}
+		return urls;
+	}
 	
 	public void update(String playerid, Map<String, Object> parameters) {
-		
-		if (parameters.containsKey("role"))
-		;
+		if (CollectionUtils.isEmpty(parameters)) return;
+		Player player = playerRepository.getById(playerid);
+		if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
+		if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
+		if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
+		if (parameters.containsKey("status")) player.setStatus((String) parameters.get("status"));
 	}
 	
 }
