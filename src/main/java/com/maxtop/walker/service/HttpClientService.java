@@ -7,4 +7,6 @@ public interface HttpClientService {
 	
 	public Object executeGetService(String uri, Map<String, String> paramMap);
 	
+	public Object executePostService(String uri, Map<String, String> paramMap);
+	
 }

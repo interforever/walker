@@ -86,12 +86,12 @@ public class HttpClientServiceImpl implements HttpClientService {
 		params.setParameter("_t_", timestamp);
 		params.setParameter("_s_", MD5.GetMD5Code(key + timestamp + secret));
 		if (!CollectionUtils.isEmpty(paramMap)) {
-			uri += "?";
+			//			uri += "?";
 			for (Map.Entry<String, String> entry : paramMap.entrySet()) {
-				uri += entry.getKey() + "=" + entry.getValue() + "&";
-				//				params.setParameter(entry.getKey(), entry.getValue());
+				//				uri += entry.getKey() + "=" + entry.getValue() + "&";
+				params.setParameter(entry.getKey(), entry.getValue());
 			}
-			uri = uri.substring(0, uri.length() - 1);
+			//			uri = uri.substring(0, uri.length() - 1);
 		}
 		HttpPost httpPost = new HttpPost(uri);
 		httpPost.setParams(params);

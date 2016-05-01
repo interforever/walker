@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxtop.walker.dao.VisibleSettingDao">
+	<resultMap id="VisibleSetting" type="com.maxtop.walker.model.VisibleSetting">
+		<result column="subjectId" property="subjectId" jdbcType="VARCHAR" />
+		<result column="objectId" property="objectId" jdbcType="VARCHAR" />
+		<result column="visible" property="visible" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="getVisibleSettings" resultType="com.maxtop.walker.model.VisibleSetting">
+		select subjectId, objectId, visible from t_visible_setting
+	</select>
+	<select id="getVisibleSetting" resultType="com.maxtop.walker.model.VisibleSetting">
+		select subjectId, objectId, visible from t_visible_setting where subjectId = #{0} and objectId = #{1}
+	</select>
+	<insert id="addVisibleSetting" parameterType="com.maxtop.walker.model.VisibleSetting">
+		insert into t_visible_setting (subjectId, objectId, visible) values (#{0},#{1},#{2})
+	</insert>
+	<update id="updateVisibleSetting" parameterType="com.maxtop.walker.model.VisibleSetting">
+		update t_visible_setting set visible = #{2} where subjectId = #{0} and objectId = #{1}
+	</update>
+</mapper>
