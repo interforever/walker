@@ -3,9 +3,9 @@ package com.maxtop.walker.model;
 
 public class Setting {
 	
-	private Double centerLng;
+	private String centerLng;
 	
-	private Double centerLat;
+	private String centerLat;
 	
 	private Integer radius;
 	
@@ -17,19 +17,19 @@ public class Setting {
 	
 	private Integer add;
 	
-	public Double getCenterLng() {
+	public String getCenterLng() {
 		return centerLng;
 	}
 	
-	public void setCenterLng(Double centerLng) {
+	public void setCenterLng(String centerLng) {
 		this.centerLng = centerLng;
 	}
 	
-	public Double getCenterLat() {
+	public String getCenterLat() {
 		return centerLat;
 	}
 	
-	public void setCenterLat(Double centerLat) {
+	public void setCenterLat(String centerLat) {
 		this.centerLat = centerLat;
 	}
 	
@@ -55,6 +55,22 @@ public class Setting {
 	
 	public void setWarningDistance(Integer warningDistance) {
 		this.warningDistance = warningDistance;
+	}
+	
+	public Double getMul() {
+		return mul;
+	}
+	
+	public void setMul(Double mul) {
+		this.mul = mul;
+	}
+	
+	public Integer getAdd() {
+		return add;
+	}
+	
+	public void setAdd(Integer add) {
+		this.add = add;
 	}
 	
 }

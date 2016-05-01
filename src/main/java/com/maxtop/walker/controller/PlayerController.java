@@ -56,6 +56,11 @@ public class PlayerController {
 		return null;
 	}
 	
+	@RequestMapping(value = "/{playerid}/audience/avatar", method = RequestMethod.GET)
+	public List<String> getAudienceAvatars(@PathVariable String playerid) {
+		return playerService.getAudienceAvatars(playerid);
+	}
+	
 	@RequestMapping(value = "/playerid/{playerid}", method = RequestMethod.POST)
 	public void updatePlayer(@PathVariable String playerid, @RequestBody Map<String, Object> parameters) {
 		playerService.update(playerid, parameters);

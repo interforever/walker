@@ -24,6 +24,9 @@ public class PlayerServiceImpl implements PlayerService {
 	@Value("${player.audience.count.url:http://114.80.120.78:9999/api/v1/zb/online/user}")
 	private String playerAudienceCountUrl;
 	
+	@Value("${player.audience.avatar.url:http://114.80.120.78:9999/api/v1/online/user}")
+	private String playerAudienceAvatarUrl;
+	
 	@Autowired
 	private HttpClientService httpClientService;
 	
@@ -70,6 +73,10 @@ public class PlayerServiceImpl implements PlayerService {
 		}
 		return players;
 	}
+
+	public List<String> getAudienceAvatars(String playerid) {
+	    return null;
+    }
 	
 	public void update(String playerid, Map<String, Object> parameters) {
 		
