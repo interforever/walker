@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxtop.walker.dao.PlayerItemDao">
+	<resultMap id="BaseResultMap" type="com.maxtop.walker.model.PlayerItem">
+		<result column="itemId" property="itemId" jdbcType="INTEGER" />
+		<result column="usedAmount" property="usedAmount" jdbcType="INTEGER" />
+		<result column="playerid" property="playerid" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getPlayerItem" resultType="com.maxtop.walker.model.PlayerItem">
+		select itemId, usedAmount, playerid from t_player_item where playerid = #{0} and itemId = #{1}
+	</select>
+	<insert id="addPlayerItem" parameterType="com.maxtop.walker.model.PlayerItem">
+		insert into t_player_item (itemId, usedAmount, playerid) values (#{1},#{2},#{0})
+	</insert>
+	<update id="updateUsedAmount" parameterType="com.maxtop.walker.model.PlayerItem">
+		update t_player_item set usedAmount = #{2} where playerid = #{0} and itemId = #{1}
+	</update>
+</mapper>

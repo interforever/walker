@@ -15,6 +15,8 @@ public class PlayerItem {
 	
 	private Integer mixAmount;
 	
+	private Integer usedAmount = 0;
+	
 	private Integer currentAmount;
 	
 	private Integer playerNeed;
@@ -79,6 +81,14 @@ public class PlayerItem {
 	
 	public void setMixAmount(Integer mixAmount) {
 		this.mixAmount = mixAmount;
+	}
+	
+	public Integer getUsedAmount() {
+		return usedAmount;
+	}
+	
+	public void setUsedAmount(Integer usedAmount) {
+		this.usedAmount = usedAmount;
 	}
 	
 	public Integer getCurrentAmount() {

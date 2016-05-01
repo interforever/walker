@@ -46,6 +46,10 @@ public class SettingRepository implements InitializingBean, DisposableBean {
 	public Setting getSettings() {
 		return setting;
 	}
+
+	public void setSetting(Setting setting) {
+		this.setting = setting;
+    }
 	
 	public void destroy() throws Exception {
 		clear();

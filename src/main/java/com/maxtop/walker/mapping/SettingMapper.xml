@@ -13,4 +13,7 @@
 	<select id="getSettings" resultType="com.maxtop.walker.model.Setting">
 		select centerLng, centerLat, radius, warningSwitch, warningDistance, mul, `add` from t_setting
 	</select>
+	<update id="updateSetting" parameterType="com.maxtop.walker.model.Setting">
+		update t_setting set centerLng = #{0}, centerLat = #{1}, radius = #{2}, warningSwitch = #{3}, warningDistance = #{4}, mul = #{5}, `add` = #{6}
+	</update>
 </mapper>

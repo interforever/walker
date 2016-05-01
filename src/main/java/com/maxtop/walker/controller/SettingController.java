@@ -54,6 +54,11 @@ public class SettingController {
 		return map;
 	}
 	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public void updateSettings(@RequestBody Map<String,Object> parameters){
+		settingService.updateSettings(parameters);
+	}
+	
 	@RequestMapping(value = "/notification/", method = RequestMethod.GET)
 	public List<Notification> getNotifications() {
 		return notificationService.list();

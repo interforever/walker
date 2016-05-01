@@ -52,7 +52,14 @@ public class PlayerServiceImpl implements PlayerService {
 		List<Map<String, Object>> playerMaps = (List<Map<String, Object>>) map.get("data");
 		for (Map<String, Object> playerMap : playerMaps) {
 			Player player = new Player();
-			player.setStatus((String) playerMap.get("status"));
+			String status = (String) playerMap.get("status");
+			if ("1".equals(status)) {
+				player.setStatus("’˝≥£");
+			} else if ("2".equals(status)) {
+				player.setStatus("»Î”¸");
+			} else {
+				player.setStatus("Ã‘Ã≠");
+			}
 			if (playerMap.get("moneyRank") != null) player.setMoneyRank(((Number) playerMap.get("moneyRank")).intValue());
 			player.setTel((String) playerMap.get("tel"));
 			player.setName((String) playerMap.get("name"));
@@ -84,15 +91,9 @@ public class PlayerServiceImpl implements PlayerService {
 		return players;
 	}
 	
-	public List<String> getAudienceAvatars(String playerid) {
-		int audienceCount = playerRepository.getById(playerid).getAudience();
-		if (audienceCount < playerAudienceAvatarLimit) audienceCount = playerAudienceAvatarLimit;
-		List<String> urls = new ArrayList<String>();
-		for (int i = 0; i < audienceCount; i++) {
-			int avatarId = (int) (Math.random() * audienceFakerAvatarCount) + 1;
-			urls.add(audienceFakerAvatarUrl + avatarId + ".jpg");
-		}
-		return urls;
+	public void add(Map<String, Object> parameters) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public void update(String playerid, Map<String, Object> parameters) {
@@ -102,6 +103,17 @@ public class PlayerServiceImpl implements PlayerService {
 		if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
 		if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
 		if (parameters.containsKey("status")) player.setStatus((String) parameters.get("status"));
+	}
+	
+	public List<String> getAudienceAvatars(String playerid) {
+		int audienceCount = playerRepository.getById(playerid).getAudience();
+		if (audienceCount < playerAudienceAvatarLimit) audienceCount = playerAudienceAvatarLimit;
+		List<String> urls = new ArrayList<String>();
+		for (int i = 0; i < audienceCount; i++) {
+			int avatarId = (int) (Math.random() * audienceFakerAvatarCount) + 1;
+			urls.add(audienceFakerAvatarUrl + avatarId + ".jpg");
+		}
+		return urls;
 	}
 	
 }

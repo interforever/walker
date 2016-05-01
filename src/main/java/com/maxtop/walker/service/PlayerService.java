@@ -9,6 +9,8 @@ import com.maxtop.walker.model.Player;
 public interface PlayerService {
 	
 	public List<Player> list();
+
+	public void add(Map<String, Object> parameters);
 	
 	public void update(String playerid, Map<String, Object> parameters);
 

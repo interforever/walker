@@ -44,7 +44,7 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 		playerItemsMap.clear();
 	}
 	
-	public Object getItemsById(String playerid) {
+	public List<PlayerItem> getItemsById(String playerid) {
 		return playerItemsMap.get(playerid);
 	}
 	

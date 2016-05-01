@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.maxtop.walker.cache.PlayerItemRepository;
 import com.maxtop.walker.cache.PlayerRepository;
+import com.maxtop.walker.dao.PlayerItemDao;
 import com.maxtop.walker.model.Player;
 import com.maxtop.walker.model.PlayerItem;
 import com.maxtop.walker.service.HttpClientService;
@@ -28,6 +30,12 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 	
 	@Autowired
 	private PlayerRepository playerRepository;
+	
+	@Autowired
+	private PlayerItemRepository playerItemRepository;
+	
+	@Autowired
+	private PlayerItemDao playerItemDao;
 	
 	public Map<String, List<PlayerItem>> list() {
 		Map<String, List<PlayerItem>> playerItemsMap = new HashMap<String, List<PlayerItem>>();
@@ -74,5 +82,23 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 			}
 		}
 		return playerItems;
+	}
+	
+	public void update(String playerid, String itemid, Map<String, Object> parameters) {
+		if (CollectionUtils.isEmpty(parameters)) return;
+		if (parameters.containsKey("usedAmount")) {
+			for (PlayerItem playerItem : playerItemRepository.getItemsById(playerid)) {
+				if (!itemid.equals(playerItem.getItemId().toString())) continue;
+				int usedAmount = ((Number) parameters.get("usedAmount")).intValue();
+				int itemId = Integer.parseInt(itemid);
+				if (CollectionUtils.isEmpty(playerItemDao.getPlayerItem(playerid, itemId))) {
+					playerItemDao.addPlayerItem(playerid, itemId, usedAmount);
+				} else {
+					playerItemDao.updateUsedAmount(playerid, itemId, usedAmount);
+				}
+				playerItem.setUsedAmount(usedAmount);
+				return;
+			}
+		}
 	}
 }

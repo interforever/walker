@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maxtop.walker.cache.PlayerItemRepository;
 import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.model.Player;
+import com.maxtop.walker.service.PlayerItemService;
 import com.maxtop.walker.service.PlayerService;
 
 @RestController
@@ -30,6 +31,9 @@ public class PlayerController {
 	
 	@Autowired
 	private PlayerService playerService;
+	
+	@Autowired
+	private PlayerItemService playerItemService;
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Map<String, List<Map<String, Object>>> getList() {
@@ -48,6 +52,16 @@ public class PlayerController {
 		return data;
 	}
 	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public void addPlayer(@RequestBody Map<String, Object> parameters) {
+//		playerService.add(parameters);
+	}
+	
+	@RequestMapping(value = "/{playerid}", method = RequestMethod.POST)
+	public void updatePlayer(@PathVariable String playerid, @RequestBody Map<String, Object> parameters) {
+		playerService.update(playerid, parameters);
+	}
+	
 	@RequestMapping(value = "/playerid/{tel}", method = RequestMethod.GET)
 	public String getPlayeridByTel(@PathVariable String tel) {
 		for (Player player : playerRepository.list()) {
@@ -56,14 +70,14 @@ public class PlayerController {
 		return null;
 	}
 	
+	@RequestMapping(value = "/{playerid}/{itemid}", method = RequestMethod.POST)
+	public void updatePlayerItem(@PathVariable String playerid, @PathVariable String itemid, @RequestBody Map<String, Object> parameters) {
+		playerItemService.update(playerid, itemid, parameters);
+	}
+	
 	@RequestMapping(value = "/{playerid}/audience/avatar", method = RequestMethod.GET)
 	public List<String> getAudienceAvatars(@PathVariable String playerid) {
 		return playerService.getAudienceAvatars(playerid);
-	}
-	
-	@RequestMapping(value = "/playerid/{playerid}", method = RequestMethod.POST)
-	public void updatePlayer(@PathVariable String playerid, @RequestBody Map<String, Object> parameters) {
-		playerService.update(playerid, parameters);
 	}
 	
 }
