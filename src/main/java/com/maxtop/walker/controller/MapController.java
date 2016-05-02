@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maxtop.walker.cache.PlayerRepository;
+import com.maxtop.walker.cache.VisibleSettingRepository;
 import com.maxtop.walker.model.Player;
+import com.maxtop.walker.model.VisibleSetting;
 import com.maxtop.walker.service.PlayerService;
 
 @RestController
@@ -27,10 +29,18 @@ public class MapController {
 	@Autowired
 	private PlayerRepository playerRepository;
 	
+	@Autowired
+	private VisibleSettingRepository visibleSettingRepository;
+	
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.GET)
-	public List<Map<String, Object>> getMapElements() {
+	public List<Map<String, Object>> getMapElements(@PathVariable String playerid) {
 		List<Map<String, Object>> elements = new ArrayList<Map<String, Object>>();
 		for (Player player : playerRepository.list()) {
+			String role = player.getRole();
+			if ("×·²¶Õß".equals(role) || "ÌÓÍöÕß".equals(role) || "ºò²¹Õß".equals(role)) {
+				VisibleSetting visibleSetting = visibleSettingRepository.getVisibleSetting(playerid, player.getPlayerid());
+				if (visibleSetting == null || visibleSetting.getVisible() == 0) continue;
+			}
 			Map<String, Object> element = new HashMap<String, Object>();
 			element.put("playerid", player.getPlayerid());
 			element.put("name", player.getName());

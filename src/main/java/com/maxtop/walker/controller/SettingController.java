@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maxtop.walker.cache.PlayerRepository;
+import com.maxtop.walker.cache.VisibleSettingRepository;
 import com.maxtop.walker.model.Notification;
 import com.maxtop.walker.model.Setting;
 import com.maxtop.walker.service.NotificationService;
@@ -34,6 +35,9 @@ public class SettingController {
 	
 	@Autowired
 	private VisibleSettingService visibleSettingService;
+	
+	@Autowired
+	private VisibleSettingRepository visibleSettingRepository;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public Map<String, Object> getSettings() {
@@ -73,7 +77,7 @@ public class SettingController {
 	public Map<String, Object> getVisibleSettings() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("players", playerRepository.list());
-		map.put("visibleSettings", visibleSettingService.list());
+		map.put("visibleSettings", visibleSettingRepository.getVisibleSettings());
 		return map;
 	}
 	

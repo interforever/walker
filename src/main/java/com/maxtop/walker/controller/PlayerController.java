@@ -54,7 +54,7 @@ public class PlayerController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public void addPlayer(@RequestBody Map<String, Object> parameters) {
-		//		playerService.add(parameters);
+		playerService.add(parameters);
 	}
 	
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.POST)
@@ -81,8 +81,14 @@ public class PlayerController {
 	
 	@RequestMapping(value = "/{playerid}/audience/avatar", method = RequestMethod.GET)
 	public Map<String, Object> getAudienceAvatars(@PathVariable String playerid) {
+		List<Map<String, Object>> avatarMaps = new ArrayList<Map<String, Object>>();
+		for (String url : playerService.getAudienceAvatars(playerid)) {
+			Map<String, Object> avatarMap = new HashMap<String, Object>();
+			avatarMap.put("url", url);
+			avatarMaps.add(avatarMap);
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("avatars", playerService.getAudienceAvatars(playerid));
+		map.put("avatars", avatarMaps);
 		return map;
 	}
 	
