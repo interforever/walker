@@ -54,7 +54,7 @@ public class PlayerController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public void addPlayer(@RequestBody Map<String, Object> parameters) {
-//		playerService.add(parameters);
+		//		playerService.add(parameters);
 	}
 	
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.POST)
@@ -63,11 +63,15 @@ public class PlayerController {
 	}
 	
 	@RequestMapping(value = "/playerid/{tel}", method = RequestMethod.GET)
-	public String getPlayeridByTel(@PathVariable String tel) {
+	public Map<String, Object> getPlayeridByTel(@PathVariable String tel) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		for (Player player : playerRepository.list()) {
-			if (tel.equals(player.getTel())) return player.getPlayerid();
+			if (tel.equals(player.getTel())) {
+				map.put("tel", player.getPlayerid());
+				break;
+			}
 		}
-		return null;
+		return map;
 	}
 	
 	@RequestMapping(value = "/{playerid}/{itemid}", method = RequestMethod.POST)
@@ -76,8 +80,10 @@ public class PlayerController {
 	}
 	
 	@RequestMapping(value = "/{playerid}/audience/avatar", method = RequestMethod.GET)
-	public List<String> getAudienceAvatars(@PathVariable String playerid) {
-		return playerService.getAudienceAvatars(playerid);
+	public Map<String, Object> getAudienceAvatars(@PathVariable String playerid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("avatars", playerService.getAudienceAvatars(playerid));
+		return map;
 	}
 	
 }

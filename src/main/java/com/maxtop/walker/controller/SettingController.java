@@ -46,7 +46,7 @@ public class SettingController {
 		map.put("center", centerMap);
 		map.put("radius", setting.getRadius());
 		Map<String, Object> warningMap = new HashMap<String, Object>();
-		warningMap.put("switch", setting.getWarningSwitch());
+		warningMap.put("warningSwitch", setting.getWarningSwitch());
 		warningMap.put("distance", setting.getWarningDistance());
 		map.put("distanceWarning", warningMap);
 		map.put("add", setting.getAdd());

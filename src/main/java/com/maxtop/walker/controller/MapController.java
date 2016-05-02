@@ -32,6 +32,7 @@ public class MapController {
 		List<Map<String, Object>> elements = new ArrayList<Map<String, Object>>();
 		for (Player player : playerRepository.list()) {
 			Map<String, Object> element = new HashMap<String, Object>();
+			element.put("playerid", player.getPlayerid());
 			element.put("name", player.getName());
 			element.put("avatar", player.getAvatar());
 			element.put("status", player.getStatus());
