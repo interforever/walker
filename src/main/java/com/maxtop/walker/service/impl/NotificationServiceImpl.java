@@ -39,7 +39,7 @@ public class NotificationServiceImpl implements NotificationService {
 			Notification notification = new Notification();
 			notification.setId(((Number) notificationMap.get("id")).intValue());
 			notification.setContent((String) notificationMap.get("content"));
-			notification.setCreate_time(new Date(((Number) notificationMap.get("create_time")).longValue()));
+			notification.setCreate_time(new Date(((Number) notificationMap.get("create_time")).longValue() * 1000));
 			notifications.add(notification);
 		}
 		return notifications;

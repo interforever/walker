@@ -33,7 +33,7 @@ public class MapController {
 	private VisibleSettingRepository visibleSettingRepository;
 	
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.GET)
-	public List<Map<String, Object>> getMapElements(@PathVariable String playerid) {
+	public Map<String,Object> getMapElements(@PathVariable String playerid) {
 		List<Map<String, Object>> elements = new ArrayList<Map<String, Object>>();
 		for (Player player : playerRepository.list()) {
 			String role = player.getRole();
@@ -52,7 +52,9 @@ public class MapController {
 			element.put("lat", player.getLat());
 			elements.add(element);
 		}
-		return elements;
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("data", elements);
+		return map;
 	}
 	
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.POST)

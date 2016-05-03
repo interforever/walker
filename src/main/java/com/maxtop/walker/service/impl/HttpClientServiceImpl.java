@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -41,11 +42,15 @@ public class HttpClientServiceImpl implements HttpClientService {
 	
 	public Object executeGetService(String uri, Map<String, String> paramMap) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpParams params = new BasicHttpParams();
-		String timestamp = String.valueOf(System.currentTimeMillis());
-		params.setParameter("_k_", key);
-		params.setParameter("_t_", timestamp);
-		params.setParameter("_s_", MD5.GetMD5Code(key + timestamp + secret));
+		//		HttpParams params = new BasicHttpParams();
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		//		params.setParameter("_k_", key);
+		//		params.setParameter("_t_", timestamp);
+		//		params.setParameter("_s_", MD5.GetMD5Code(key + timestamp + secret));
+		if (paramMap == null) paramMap = new HashMap<String, String>();
+		paramMap.put("_k_", key);
+		paramMap.put("_t_", timestamp);
+		paramMap.put("_s_", MD5.GetMD5Code(key + timestamp + secret));
 		if (!CollectionUtils.isEmpty(paramMap)) {
 			uri += "?";
 			for (Map.Entry<String, String> entry : paramMap.entrySet()) {
@@ -55,7 +60,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			uri = uri.substring(0, uri.length() - 1);
 		}
 		HttpGet httpGet = new HttpGet(uri);
-		httpGet.setParams(params);
+		//		httpGet.setParams(params);
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
@@ -78,7 +83,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 		return null;
 	}
 	
-	public Object executePostService(String uri, Map<String, String> paramMap) {
+	public Object executePostService(String uri, Map<String, Object> paramMap) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpParams params = new BasicHttpParams();
 		String timestamp = String.valueOf(System.currentTimeMillis());
@@ -87,7 +92,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 		params.setParameter("_s_", MD5.GetMD5Code(key + timestamp + secret));
 		if (!CollectionUtils.isEmpty(paramMap)) {
 			//			uri += "?";
-			for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+			for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
 				//				uri += entry.getKey() + "=" + entry.getValue() + "&";
 				params.setParameter(entry.getKey(), entry.getValue());
 			}

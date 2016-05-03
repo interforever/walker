@@ -19,22 +19,28 @@ import com.maxtop.walker.service.PlayerService;
 @Service
 public class PlayerServiceImpl implements PlayerService {
 	
-	@Value("${player.list.url:http://114.80.120.78:9999/api/v1/player/money/rank}")
+	@Value("${player.list.url}")
 	private String playerListUrl;
 	
-	@Value("${player.audience.count.url:http://114.80.120.78:9999/api/v1/zb/online/user}")
+	@Value("${player.info.url}")
+	private String playerInfoUrl;
+	
+	@Value("${player.tudou.add.url}")
+	private String playerTudouAddUrl;
+	
+	@Value("${player.audience.count.url}")
 	private String playerAudienceCountUrl;
 	
-	@Value("${player.audience.avatar.url:http://114.80.120.78:9999/api/v1/online/user}")
+	@Value("${player.audience.avatar.url}")
 	private String playerAudienceAvatarUrl;
 	
-	@Value("${player.audience.avatar.limit:20}")
+	@Value("${player.audience.avatar.limit}")
 	private Integer playerAudienceAvatarLimit;
 	
-	@Value("${audience.faker.avatar.url:http://static.youku.com/user/img/avatar/50/}")
+	@Value("${audience.faker.avatar.url}")
 	private String audienceFakerAvatarUrl;
 	
-	@Value("${audience.faker.avatar.count:57}")
+	@Value("${audience.faker.avatar.count}")
 	private Integer audienceFakerAvatarCount;
 	
 	@Autowired
@@ -60,18 +66,39 @@ public class PlayerServiceImpl implements PlayerService {
 			} else {
 				player.setStatus("淘汰");
 			}
-			if (playerMap.get("moneyRank") != null) player.setMoneyRank(((Number) playerMap.get("moneyRank")).intValue());
+			String role = (String) playerMap.get("role");
+			if ("1".equals(role)) {
+				player.setRole("逃亡者");
+			} else if ("2".equals(role)) {
+				player.setRole("追捕者");
+			} else if ("3".equals(role)) {
+				player.setRole("候补者");
+			} else if ("4".equals(role)) {
+				player.setRole("基地");
+			} else if ("5".equals(role)) {
+				player.setRole("监狱");
+			} else if ("6".equals(role)) {
+				player.setRole("赌场");
+			} else if ("7".equals(role)) {
+				player.setRole("安全屋");
+			} else if ("8".equals(role)) {
+				player.setRole("角斗场");
+			} else if ("9".equals(role)) {
+				player.setRole("移动商贩");
+			} else if ("10".equals(role)) {
+				player.setRole("天眼");
+			}
 			player.setTel((String) playerMap.get("tel"));
 			player.setName((String) playerMap.get("name"));
 			player.setTudou((String) playerMap.get("tudou"));
+			if (playerMap.get("rank") != null) player.setRank(((Number) playerMap.get("rank")).intValue());
 			player.setZbid((String) playerMap.get("zbid"));
 			player.setPlayerid((String) playerMap.get("playerid"));
 			player.setMoney((String) playerMap.get("money"));
+			if (playerMap.get("money_rank") != null) player.setMoneyRank(((Number) playerMap.get("money_rank")).intValue());
 			player.setZburl((String) playerMap.get("zburl"));
 			player.setJail_time((String) playerMap.get("jail_time"));
-			if (playerMap.get("rank") != null) player.setRank(((Number) playerMap.get("rank")).intValue());
 			player.setShowForUser((String) playerMap.get("showForUser"));
-			player.setRole((String) playerMap.get("role"));
 			player.setAvatar((String) playerMap.get("avatar"));
 			player.setLat((String) playerMap.get("lat"));
 			player.setRoomId((String) playerMap.get("roomId"));
@@ -103,6 +130,21 @@ public class PlayerServiceImpl implements PlayerService {
 		if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
 		if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
 		if (parameters.containsKey("status")) player.setStatus((String) parameters.get("status"));
+		if (parameters.containsKey("tudou")) {
+			Map<String, Object> postParameters = new HashMap<String, Object>();
+			postParameters.put("playerid", Integer.parseInt(playerid));
+			postParameters.put("tudou", ((Number) parameters.get("tudou")).intValue());
+			httpClientService.executePostService(playerTudouAddUrl, postParameters);
+			Map<String, String> getParameters = new HashMap<String, String>();
+			getParameters.put("playerid", playerid);
+			@SuppressWarnings("unchecked")
+			Map<String, Object> playerInfoMap = (Map<String, Object>) httpClientService.executeGetService(playerInfoUrl, getParameters);
+			if (((Number) playerInfoMap.get("code")).intValue() == 0) {
+				@SuppressWarnings("unchecked")
+				Map<String, Object> playerMap = (Map<String, Object>) playerInfoMap.get("data");
+				player.setTudou((String) playerMap.get("tudou"));
+			}
+		}
 	}
 	
 	public List<String> getAudienceAvatars(String playerid) {
