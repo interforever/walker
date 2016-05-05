@@ -12,11 +12,11 @@
 
 	<!-- 全局参数定义 -->
 	<bean id="GlobalPropertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="locations">
 			<list>
-				<value>classpath:config.properties</value>
+				<value>classpath*:config.properties</value>
 			</list>
 		</property>
 	</bean>

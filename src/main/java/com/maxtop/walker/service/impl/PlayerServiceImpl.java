@@ -22,37 +22,37 @@ import com.maxtop.walker.service.PlayerService;
 @Service
 public class PlayerServiceImpl implements PlayerService {
 	
-	@Value("${player.list.url}")
+	@Value("${player.list.url:http://114.80.120.78:9999/api/v1/player/all}")
 	private String playerListUrl;
 	
-	@Value("${player.info.url}")
+	@Value("${player.info.url:http://114.80.120.78:9999/api/v1/player/info}")
 	private String playerInfoUrl;
 	
-	@Value("${player.add.url}")
+	@Value("${player.add.url:http://114.80.120.78:9999/api/v1/player/add}")
 	private String playerAddUrl;
 	
-	@Value("${player.update.url}")
+	@Value("${player.update.url:http://114.80.120.78:9999/api/v1/player/update}")
 	private String playerUpdateUrl;
 	
-	@Value("${player.delete.url}")
+	@Value("${player.delete.url:http://114.80.120.78:9999/api/v1/player/del}")
 	private String playerDeleteUrl;
 	
-	@Value("${player.tudou.add.url}")
+	@Value("${player.tudou.add.url:http://114.80.120.78:9999/api/v1/user/tudou/add}")
 	private String playerTudouAddUrl;
 	
-	@Value("${player.audience.count.url}")
+	@Value("${player.audience.count.url:http://114.80.120.78:9999/api/v1/player/online/num}")
 	private String playerAudienceCountUrl;
 	
-	@Value("${player.audience.avatar.url}")
+	@Value("${player.audience.avatar.url:http://114.80.120.78:9999/api/v1/online/user}")
 	private String playerAudienceAvatarUrl;
 	
-	@Value("${player.audience.avatar.limit}")
+	@Value("${player.audience.avatar.limit:20}")
 	private Integer playerAudienceAvatarLimit;
 	
-	@Value("${audience.faker.avatar.url}")
+	@Value("${audience.faker.avatar.url:http://static.youku.com/user/img/avatar/50/}")
 	private String audienceFakerAvatarUrl;
 	
-	@Value("${audience.faker.avatar.count}")
+	@Value("${audience.faker.avatar.count:57}")
 	private Integer audienceFakerAvatarCount;
 	
 	@Autowired
@@ -116,12 +116,15 @@ public class PlayerServiceImpl implements PlayerService {
 	public void add(Map<String, Object> parameters) {
 		Map<String, String> paramMap = new HashMap<String, String>();
 		if (parameters.containsKey("playerid")) paramMap.put("playerid", (String) parameters.get("playerid"));
+		if (parameters.containsKey("zbid")) paramMap.put("zbid", (String) parameters.get("zbid"));
 		if (parameters.containsKey("avatar")) paramMap.put("avatar", (String) parameters.get("avatar"));
 		if (parameters.containsKey("name")) paramMap.put("name", (String) parameters.get("name"));
 		if (parameters.containsKey("role")) paramMap.put("role", (String) parameters.get("role"));
 		if (parameters.containsKey("tel")) paramMap.put("tel", (String) parameters.get("tel"));
 		if (parameters.containsKey("zburl")) paramMap.put("zburl", (String) parameters.get("zburl"));
 		if (parameters.containsKey("room_id")) paramMap.put("room_id", (String) parameters.get("room_id"));
+		if (parameters.containsKey("lng")) paramMap.put("lng", (String) parameters.get("lng"));
+		if (parameters.containsKey("lat")) paramMap.put("lat", (String) parameters.get("lat"));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerAddUrl, paramMap);
 		if (!"0".equals((String) result.get("code"))) throw new RuntimeException((String) result.get("msg"));
