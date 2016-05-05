@@ -22,28 +22,28 @@ import com.maxtop.walker.service.PlayerService;
 @Service
 public class PlayerServiceImpl implements PlayerService {
 	
-	@Value("${player.list.url:http://114.80.120.78:9999/api/v1/player/all}")
+	@Value("${player.list.url:http://api.zb.youku.com/api/v1/player/all}")
 	private String playerListUrl;
 	
-	@Value("${player.info.url:http://114.80.120.78:9999/api/v1/player/info}")
+	@Value("${player.info.url:http://api.zb.youku.com/api/v1/player/info}")
 	private String playerInfoUrl;
 	
-	@Value("${player.add.url:http://114.80.120.78:9999/api/v1/player/add}")
+	@Value("${player.add.url:http://api.zb.youku.com/api/v1/player/add}")
 	private String playerAddUrl;
 	
-	@Value("${player.update.url:http://114.80.120.78:9999/api/v1/player/update}")
+	@Value("${player.update.url:http://api.zb.youku.com/api/v1/player/update}")
 	private String playerUpdateUrl;
 	
-	@Value("${player.delete.url:http://114.80.120.78:9999/api/v1/player/del}")
+	@Value("${player.delete.url:http://api.zb.youku.com/api/v1/player/del}")
 	private String playerDeleteUrl;
 	
-	@Value("${player.tudou.add.url:http://114.80.120.78:9999/api/v1/user/tudou/add}")
+	@Value("${player.tudou.add.url:http://api.zb.youku.com/api/v1/user/tudou/add}")
 	private String playerTudouAddUrl;
 	
-	@Value("${player.audience.count.url:http://114.80.120.78:9999/api/v1/player/online/num}")
+	@Value("${player.audience.count.url:http://api.zb.youku.com/api/v1/player/online/num}")
 	private String playerAudienceCountUrl;
 	
-	@Value("${player.audience.avatar.url:http://114.80.120.78:9999/api/v1/online/user}")
+	@Value("${player.audience.avatar.url:http://api.zb.youku.com/api/v1/online/user}")
 	private String playerAudienceAvatarUrl;
 	
 	@Value("${player.audience.avatar.limit:20}")

@@ -1,6 +1,7 @@
 
 package com.maxtop.walker.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.cache.VisibleSettingRepository;
 import com.maxtop.walker.model.Notification;
+import com.maxtop.walker.model.Player;
 import com.maxtop.walker.model.Setting;
+import com.maxtop.walker.model.Player.Role;
 import com.maxtop.walker.service.NotificationService;
 import com.maxtop.walker.service.SettingService;
 import com.maxtop.walker.service.VisibleSettingService;
@@ -59,7 +62,7 @@ public class SettingController {
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public void updateSettings(@RequestBody Map<String,Object> parameters){
+	public void updateSettings(@RequestBody Map<String, Object> parameters) {
 		settingService.updateSettings(parameters);
 	}
 	
@@ -76,7 +79,16 @@ public class SettingController {
 	@RequestMapping(value = "/visible/", method = RequestMethod.GET)
 	public Map<String, Object> getVisibleSettings() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("players", playerRepository.list());
+		List<Player> players = new ArrayList<Player>();
+		for (Player player : playerRepository.list()) {
+			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
+			players.add(player);
+		}
+		Player audience = new Player();
+		audience.setPlayerid("-1");
+		audience.setName("¹ÛÖÚ");
+		players.add(audience);
+		map.put("players", players);
 		map.put("visibleSettings", visibleSettingRepository.getVisibleSettings());
 		return map;
 	}

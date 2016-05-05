@@ -22,7 +22,7 @@ import com.maxtop.walker.service.PlayerItemService;
 @Service
 public class PlayerItemServiceImpl implements PlayerItemService {
 	
-	@Value("${player.item.list.url:http://114.80.120.78:9999/api/v1/zb/player/fundings}")
+	@Value("${player.item.list.url:http://api.zb.youku.com/api/v1/zb/player/fundings}")
 	private String playerItemListUrl;
 	
 	@Autowired

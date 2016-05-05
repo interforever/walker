@@ -19,10 +19,10 @@ import com.maxtop.walker.service.NotificationService;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 	
-	@Value("${setting.notification.list.url:http://114.80.120.78:9999/api/v1/notification}")
+	@Value("${setting.notification.list.url:http://api.zb.youku.com/api/v1/notification}")
 	private String settingNotificationListUrl;
 	
-	@Value("${setting.notification.add.url:http://114.80.120.78:9999/api/v1/notification/add}")
+	@Value("${setting.notification.add.url:http://api.zb.youku.com/api/v1/notification/add}")
 	private String settingNotificationAddUrl;
 	
 	@Autowired
