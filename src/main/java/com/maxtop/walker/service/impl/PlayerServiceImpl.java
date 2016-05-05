@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.maxtop.walker.cache.PlayerItemRepository;
 import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.model.Player;
+import com.maxtop.walker.model.Player.Role;
+import com.maxtop.walker.model.Player.Status;
 import com.maxtop.walker.service.HttpClientService;
 import com.maxtop.walker.service.PlayerService;
 
@@ -24,6 +27,15 @@ public class PlayerServiceImpl implements PlayerService {
 	
 	@Value("${player.info.url}")
 	private String playerInfoUrl;
+	
+	@Value("${player.add.url}")
+	private String playerAddUrl;
+	
+	@Value("${player.update.url}")
+	private String playerUpdateUrl;
+	
+	@Value("${player.delete.url}")
+	private String playerDeleteUrl;
 	
 	@Value("${player.tudou.add.url}")
 	private String playerTudouAddUrl;
@@ -49,6 +61,9 @@ public class PlayerServiceImpl implements PlayerService {
 	@Autowired
 	private PlayerRepository playerRepository;
 	
+	@Autowired
+	private PlayerItemRepository playerItemRepository;
+	
 	public List<Player> list() {
 		List<Player> players = new ArrayList<Player>();
 		@SuppressWarnings("unchecked")
@@ -58,36 +73,8 @@ public class PlayerServiceImpl implements PlayerService {
 		List<Map<String, Object>> playerMaps = (List<Map<String, Object>>) map.get("data");
 		for (Map<String, Object> playerMap : playerMaps) {
 			Player player = new Player();
-			String status = (String) playerMap.get("status");
-			if ("1".equals(status)) {
-				player.setStatus("正常");
-			} else if ("2".equals(status)) {
-				player.setStatus("入狱");
-			} else {
-				player.setStatus("淘汰");
-			}
-			String role = (String) playerMap.get("role");
-			if ("1".equals(role)) {
-				player.setRole("逃亡者");
-			} else if ("2".equals(role)) {
-				player.setRole("追捕者");
-			} else if ("3".equals(role)) {
-				player.setRole("候补者");
-			} else if ("4".equals(role)) {
-				player.setRole("基地");
-			} else if ("5".equals(role)) {
-				player.setRole("监狱");
-			} else if ("6".equals(role)) {
-				player.setRole("赌场");
-			} else if ("7".equals(role)) {
-				player.setRole("安全屋");
-			} else if ("8".equals(role)) {
-				player.setRole("角斗场");
-			} else if ("9".equals(role)) {
-				player.setRole("移动商贩");
-			} else if ("10".equals(role)) {
-				player.setRole("天眼");
-			}
+			player.setStatus(Status.getByCode((String) playerMap.get("status")).getName());
+			player.setRole(Role.getByCode((String) playerMap.get("role")).getName());
 			player.setTel((String) playerMap.get("tel"));
 			player.setName((String) playerMap.get("name"));
 			player.setTudou((String) playerMap.get("tudou"));
@@ -106,21 +93,40 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setShowForPlayer((String) playerMap.get("showForPlayer"));
 			player.setDescription((String) playerMap.get("description"));
 			players.add(player);
-			Map<String, String> serviceParam = new HashMap<String, String>();
-			serviceParam.put("zbid", player.getZbid());
-			@SuppressWarnings("unchecked")
-			Map<String, Object> audienceMap = (Map<String, Object>) httpClientService.executeGetService(playerAudienceCountUrl, serviceParam);
-			if (((Number) audienceMap.get("code")).intValue() != 0) continue;
-			@SuppressWarnings("unchecked")
-			Map<String, Object> audienceCountMap = (Map<String, Object>) audienceMap.get("data");
-			if (audienceCountMap.get("count") != null) player.setAudience(((Number) audienceCountMap.get("count")).intValue());
+			player.setAudience(getPlayerAudienceCount(player.getPlayerid()));
 		}
 		return players;
 	}
 	
+	private int getPlayerAudienceCount(String playerid) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("playerid", playerid);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> audienceMap = (Map<String, Object>) httpClientService.executePostService(playerAudienceCountUrl, paramMap);
+		if (audienceMap == null) return 0;
+		if (!audienceMap.containsKey("code")) return 0;
+		if (((Number) audienceMap.get("code")).intValue() != 0) return 0;
+		@SuppressWarnings("unchecked")
+		Map<String, Object> audienceCountMap = (Map<String, Object>) audienceMap.get("data");
+		if (audienceCountMap == null) return 0;
+		if (!audienceCountMap.containsKey("count")) return 0;
+		return ((Number) audienceCountMap.get("count")).intValue();
+	}
+	
 	public void add(Map<String, Object> parameters) {
-		// TODO Auto-generated method stub
-		
+		Map<String, String> paramMap = new HashMap<String, String>();
+		if (parameters.containsKey("playerid")) paramMap.put("playerid", (String) parameters.get("playerid"));
+		if (parameters.containsKey("avatar")) paramMap.put("avatar", (String) parameters.get("avatar"));
+		if (parameters.containsKey("name")) paramMap.put("name", (String) parameters.get("name"));
+		if (parameters.containsKey("role")) paramMap.put("role", (String) parameters.get("role"));
+		if (parameters.containsKey("tel")) paramMap.put("tel", (String) parameters.get("tel"));
+		if (parameters.containsKey("zburl")) paramMap.put("zburl", (String) parameters.get("zburl"));
+		if (parameters.containsKey("room_id")) paramMap.put("room_id", (String) parameters.get("room_id"));
+		@SuppressWarnings("unchecked")
+		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerAddUrl, paramMap);
+		if (!"0".equals((String) result.get("code"))) throw new RuntimeException((String) result.get("msg"));
+		playerRepository.refresh();
+		playerItemRepository.refresh();
 	}
 	
 	public void update(String playerid, Map<String, Object> parameters) {
@@ -145,6 +151,15 @@ public class PlayerServiceImpl implements PlayerService {
 				player.setTudou((String) playerMap.get("tudou"));
 			}
 		}
+	}
+	
+	public void delete(String playerid) {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("playerid", playerid);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerDeleteUrl, paramMap);
+		if (!"0".equals((String) result.get("code"))) return;
+		playerRepository.removePlayer(playerid);
 	}
 	
 	public List<String> getAudienceAvatars(String playerid) {

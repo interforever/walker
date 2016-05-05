@@ -26,7 +26,7 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 	@Autowired
 	private PlayerItemService playerItemService;
 	
-	private void refresh() {
+	synchronized public void refresh() {
 		logger.info("Start refreshing player items!");
 		Map<String, List<PlayerItem>> playerItemsMap = playerItemService.list();
 		if (CollectionUtils.isEmpty(playerItemsMap)) {
@@ -44,7 +44,7 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 		playerItemsMap.clear();
 	}
 	
-	public List<PlayerItem> getItemsById(String playerid) {
+	synchronized public List<PlayerItem> getItemsById(String playerid) {
 		return playerItemsMap.get(playerid);
 	}
 	

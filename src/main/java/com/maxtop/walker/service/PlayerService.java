@@ -14,6 +14,8 @@ public interface PlayerService {
 	
 	public void update(String playerid, Map<String, Object> parameters);
 
+	public void delete(String playerid);
+
 	public List<String> getAudienceAvatars(String playerid);
 	
 }

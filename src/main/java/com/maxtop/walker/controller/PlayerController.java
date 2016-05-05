@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maxtop.walker.cache.PlayerItemRepository;
 import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.model.Player;
+import com.maxtop.walker.model.Player.Role;
 import com.maxtop.walker.service.PlayerItemService;
 import com.maxtop.walker.service.PlayerService;
 
@@ -39,6 +40,7 @@ public class PlayerController {
 	public Map<String, List<Map<String, Object>>> getList() {
 		Map<String, List<Map<String, Object>>> data = new HashMap<String, List<Map<String, Object>>>();
 		for (Player player : playerRepository.list()) {
+			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
 			List<Map<String, Object>> list = data.get(player.getRole());
 			if (list == null) {
 				list = new ArrayList<Map<String, Object>>();
@@ -52,9 +54,24 @@ public class PlayerController {
 		return data;
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(value = "/building/list", method = RequestMethod.GET)
+	public List<Player> getBuildings() {
+		List<Player> buildings = new ArrayList<Player>();
+		for (Player player : playerRepository.list()) {
+			if (Role.isPlayer(Role.getByName(player.getRole()))) continue;
+			buildings.add(player);
+		}
+		return buildings;
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public void addPlayer(@RequestBody Map<String, Object> parameters) {
 		playerService.add(parameters);
+	}
+	
+	@RequestMapping(value = "/{playerid}", method = RequestMethod.DELETE)
+	public void removePlayer(@PathVariable String playerid) {
+		playerService.delete(playerid);
 	}
 	
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.POST)

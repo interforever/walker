@@ -85,21 +85,25 @@ public class HttpClientServiceImpl implements HttpClientService {
 	
 	public Object executePostService(String uri, Map<String, Object> paramMap) {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpParams params = new BasicHttpParams();
-		String timestamp = String.valueOf(System.currentTimeMillis());
-		params.setParameter("_k_", key);
-		params.setParameter("_t_", timestamp);
-		params.setParameter("_s_", MD5.GetMD5Code(key + timestamp + secret));
+		//		HttpParams params = new BasicHttpParams();
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		//		params.setParameter("_k_", key);
+		//		params.setParameter("_t_", timestamp);
+		//		params.setParameter("_s_", MD5.GetMD5Code(key + timestamp + secret));
+		if (paramMap == null) paramMap = new HashMap<String, Object>();
+		paramMap.put("_k_", key);
+		paramMap.put("_t_", timestamp);
+		paramMap.put("_s_", MD5.GetMD5Code(key + timestamp + secret));
 		if (!CollectionUtils.isEmpty(paramMap)) {
-			//			uri += "?";
+			uri += "?";
 			for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
-				//				uri += entry.getKey() + "=" + entry.getValue() + "&";
-				params.setParameter(entry.getKey(), entry.getValue());
+				uri += entry.getKey() + "=" + entry.getValue() + "&";
+				//				params.setParameter(entry.getKey(), entry.getValue());
 			}
-			//			uri = uri.substring(0, uri.length() - 1);
+			uri = uri.substring(0, uri.length() - 1);
 		}
 		HttpPost httpPost = new HttpPost(uri);
-		httpPost.setParams(params);
+		//		httpPost.setParams(params);
 		try {
 			HttpResponse response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();

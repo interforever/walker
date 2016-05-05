@@ -29,7 +29,7 @@ public class PlayerRepository implements InitializingBean, DisposableBean {
 	@Autowired
 	private PlayerService playerService;
 	
-	private void refresh() {
+	synchronized public void refresh() {
 		logger.info("Start refreshing players!");
 		List<Player> players = playerService.list();
 		if (CollectionUtils.isEmpty(players)) {
@@ -49,20 +49,25 @@ public class PlayerRepository implements InitializingBean, DisposableBean {
 		telIdMap.clear();
 	}
 	
-	public Collection<Player> list() {
+	synchronized public Collection<Player> list() {
 		return playerMap.values();
 	}
 	
-	public Player getById(String playerid) {
+	synchronized public Player getById(String playerid) {
 		return playerMap.get(playerid);
 	}
 	
-	public Player getById(Integer id) {
+	synchronized public Player getById(Integer id) {
 		return getById(id.toString());
 	}
 	
-	public Player getByTel(String tel) {
+	synchronized public Player getByTel(String tel) {
 		return getById(telIdMap.get(tel));
+	}
+	
+	synchronized public void removePlayer(String playerid) {
+		Player player = playerMap.remove(playerid);
+		telIdMap.remove(player.getTel());
 	}
 	
 	public void destroy() throws Exception {

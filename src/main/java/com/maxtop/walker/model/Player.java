@@ -203,4 +203,86 @@ public class Player {
 		this.audience = audience;
 	}
 	
+	public enum Role {
+		
+		ESCAPEE("1", "逃亡者"), CHASER("2", "追捕者"), CANDIDATE("3", "候补者"), BASE("4", "基地"), PRISON("5", "监狱"), CASINO("6", "赌场"), SAFE_HOUSE("7", "安全屋"), ARENA("8", "角斗场"), MOBILE_TRADER("9", "移动商贩"), SKY_EYE("10", "天眼");
+		
+		private String code;
+		
+		private String name;
+		
+		Role(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+		
+		public String getCode() {
+			return code;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public static Role getByCode(String code) {
+			for (Role role : Role.values()) {
+				if (role.getCode().equals(code)) return role;
+			}
+			return null;
+		}
+		
+		public static Role getByName(String name) {
+			for (Role role : Role.values()) {
+				if (role.getName().equals(name)) return role;
+			}
+			return null;
+		}
+		
+		public static boolean isPlayer(Role role) {
+			return role == ESCAPEE || role == CHASER || role == CANDIDATE;
+		}
+		
+		public static boolean isBuilding(Role role) {
+			return !isPlayer(role);
+		}
+		
+	}
+	
+	public enum Status {
+		
+		NORMAL("1", "正常"), JAILED("2", "入狱"), ELIMINATED("3", "淘汰");
+		
+		private String code;
+		
+		private String name;
+		
+		Status(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+		
+		public String getCode() {
+			return code;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public static Status getByCode(String code) {
+			for (Status status : Status.values()) {
+				if (status.getCode().equals(code)) return status;
+			}
+			return null;
+		}
+		
+		public static Status getByName(String name) {
+			for (Status status : Status.values()) {
+				if (status.getName().equals(name)) return status;
+			}
+			return null;
+		}
+		
+	}
+	
 }
