@@ -51,7 +51,7 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 		serviceParam.put("playerid", playerid);
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) httpClientService.executeGetService(playerItemListUrl, serviceParam);
-		if (map == null || !map.containsKey("code") || !"0".equals((String) map.get("code"))) return null;
+		if (map == null || !map.containsKey("code") || !"0".equals(map.get("code"))) return null;
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> playerItemCategoryMaps = (List<Map<String, Object>>) map.get("data");
 		for (Map<String, Object> playerItemCategoryMap : playerItemCategoryMaps) {
