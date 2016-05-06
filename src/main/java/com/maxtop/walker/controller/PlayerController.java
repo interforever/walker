@@ -39,6 +39,7 @@ public class PlayerController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Map<String, List<Map<String, Object>>> getList() {
 		Map<String, List<Map<String, Object>>> data = new HashMap<String, List<Map<String, Object>>>();
+		playerItemRepository.refresh();
 		for (Player player : playerRepository.list()) {
 			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
 			List<Map<String, Object>> list = data.get(player.getRole());
@@ -48,11 +49,20 @@ public class PlayerController {
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("player", player);
-			playerItemRepository.refresh();
 			map.put("items", playerItemRepository.getItemsById(player.getPlayerid()));
 			list.add(map);
 		}
 		return data;
+	}
+	
+	@RequestMapping(value = "/simplelist", method = RequestMethod.GET)
+	public List<Player> getSimpleList() {
+		List<Player> players = new ArrayList<Player>();
+		for (Player player : playerRepository.list()) {
+			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
+			players.add(player);
+		}
+		return players;
 	}
 	
 	@RequestMapping(value = "/building/list", method = RequestMethod.GET)

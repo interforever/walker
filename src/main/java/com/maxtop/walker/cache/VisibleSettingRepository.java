@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.maxtop.walker.dao.VisibleSettingDao;
 import com.maxtop.walker.model.Player;
+import com.maxtop.walker.model.Player.Role;
 import com.maxtop.walker.model.VisibleSetting;
 import com.maxtop.walker.service.VisibleSettingService;
 
@@ -42,6 +43,8 @@ public class VisibleSettingRepository implements InitializingBean, DisposableBea
 	private void refresh() {
 		logger.info("Start refreshing settings!");
 		for (Player player : playerRepository.list()) {
+			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
+			if (player.getShowForUser() == null) logger.debug(player.getPlayerid());
 			VisibleSetting visibleSetting = new VisibleSetting();
 			visibleSetting.setSubjectId("-1");
 			visibleSetting.setObjectId(player.getPlayerid());

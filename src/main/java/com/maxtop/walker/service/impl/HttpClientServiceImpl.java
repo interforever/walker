@@ -57,7 +57,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			}
 			uri = uri.substring(0, uri.length() - 1);
 		}
-		logger.info(uri);
+		if (logger.isDebugEnabled()) logger.debug(uri);
 		HttpGet httpGet = new HttpGet(uri);
 		//		httpGet.setParams(params);
 		try {
@@ -71,8 +71,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 				builder.append(line);
 				builder.append("\n");
 			}
-			//			if (logger.isDebugEnabled()) logger.debug(builder.toString());
-			logger.info(builder.toString());
+			if (logger.isDebugEnabled()) logger.debug(builder.toString());
 			Object result = gson.fromJson(builder.toString(), Object.class);
 			return result;
 		} catch (ClientProtocolException e) {
@@ -102,7 +101,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			}
 			uri = uri.substring(0, uri.length() - 1);
 		}
-		logger.info(uri);
+		if (logger.isDebugEnabled()) logger.debug(uri);
 		HttpPost httpPost = new HttpPost(uri);
 		//		httpPost.setParams(params);
 		try {
@@ -116,8 +115,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 				builder.append(line);
 				builder.append("\n");
 			}
-			//			if (logger.isDebugEnabled()) logger.debug(builder.toString());
-			logger.info(builder.toString());
+			if (logger.isDebugEnabled()) logger.debug(builder.toString());
 			Object result = gson.fromJson(builder.toString(), Object.class);
 			return result;
 		} catch (ClientProtocolException e) {

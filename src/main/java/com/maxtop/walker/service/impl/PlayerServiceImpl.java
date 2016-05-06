@@ -85,12 +85,12 @@ public class PlayerServiceImpl implements PlayerService {
 			if (playerMap.get("money_rank") != null) player.setMoneyRank(((Number) playerMap.get("money_rank")).intValue());
 			player.setZburl((String) playerMap.get("zburl"));
 			player.setJail_time((String) playerMap.get("jail_time"));
-			player.setShowForUser((String) playerMap.get("showForUser"));
+			player.setShowForUser((String) playerMap.get("show_for_user"));
 			player.setAvatar((String) playerMap.get("avatar"));
 			player.setLat((String) playerMap.get("lat"));
 			player.setRoomId((String) playerMap.get("roomId"));
 			player.setLng((String) playerMap.get("lng"));
-			player.setShowForPlayer((String) playerMap.get("showForPlayer"));
+			player.setShowForPlayer((String) playerMap.get("show_for_player"));
 			player.setDescription((String) playerMap.get("description"));
 			players.add(player);
 			player.setAudience(getPlayerAudienceCount(player.getPlayerid()));
