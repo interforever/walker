@@ -35,6 +35,8 @@ public class PlayerItem {
 	
 	private String labelName;
 	
+	private String playerid;
+	
 	public Integer getCategoryId() {
 		return categoryId;
 	}
@@ -161,6 +163,14 @@ public class PlayerItem {
 	
 	public void setLabelName(String labelName) {
 		this.labelName = labelName;
+	}
+	
+	public String getPlayerid() {
+		return playerid;
+	}
+	
+	public void setPlayerid(String playerid) {
+		this.playerid = playerid;
 	}
 	
 }

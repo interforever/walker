@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.maxtop.walker.dao.PlayerItemDao;
 import com.maxtop.walker.model.PlayerItem;
 import com.maxtop.walker.service.PlayerItemService;
 
@@ -26,6 +27,9 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 	@Autowired
 	private PlayerItemService playerItemService;
 	
+	@Autowired
+	private PlayerItemDao playerItemDao;
+	
 	synchronized public void refresh() {
 		logger.info("Start refreshing player items!");
 		Map<String, List<PlayerItem>> playerItemsMap = playerItemService.list();
@@ -35,6 +39,15 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 			clear();
 			for (Map.Entry<String, List<PlayerItem>> entry : playerItemsMap.entrySet()) {
 				this.playerItemsMap.put(entry.getKey(), entry.getValue());
+			}
+			for (PlayerItem playerItem : playerItemDao.getPlayerItems()) {
+				if (!playerItemsMap.containsKey(playerItem.getPlayerid())) continue;
+				for (PlayerItem item : playerItemsMap.get(playerItem.getPlayerid())) {
+					if (item.getItemId().equals(playerItem.getItemId())) {
+						item.setUsedAmount(playerItem.getUsedAmount());
+						break;
+					}
+				}
 			}
 			logger.info("Refreshing " + playerItemsMap.size() + " players' items successfully!");
 		}

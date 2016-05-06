@@ -127,7 +127,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (parameters.containsKey("lat")) paramMap.put("lat", (String) parameters.get("lat"));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerAddUrl, paramMap);
-		if (!"0".equals((String) result.get("code"))) throw new RuntimeException((String) result.get("msg"));
+		if (((Number) result.get("code")).intValue() != 0) throw new RuntimeException((String) result.get("msg"));
 		playerRepository.refresh();
 		playerItemRepository.refresh();
 	}
@@ -151,6 +151,7 @@ public class PlayerServiceImpl implements PlayerService {
 			}
 		} else {
 			Map<String, Object> postParameters = new HashMap<String, Object>();
+			postParameters.put("playerid", Integer.parseInt(playerid));
 			if (parameters.containsKey("lng")) postParameters.put("lng", (String) parameters.get("lng"));
 			if (parameters.containsKey("lat")) postParameters.put("lat", (String) parameters.get("lat"));
 			if (parameters.containsKey("role")) postParameters.put("role", Role.getByName((String) parameters.get("role")).getCode());
@@ -161,7 +162,7 @@ public class PlayerServiceImpl implements PlayerService {
 			if (parameters.containsKey("show_for_user")) postParameters.put("show_for_user", (String) parameters.get("show_for_user"));
 			@SuppressWarnings("unchecked")
 			Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
-			if (!"0".equals((String) result.get("code"))) throw new RuntimeException((String) result.get("msg"));
+			if (((Number) result.get("code")).intValue() != 0) throw new RuntimeException((String) result.get("msg"));
 			if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
 			if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
 			if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));

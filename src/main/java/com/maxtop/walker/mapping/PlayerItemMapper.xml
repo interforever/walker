@@ -6,6 +6,9 @@
 		<result column="usedAmount" property="usedAmount" jdbcType="INTEGER" />
 		<result column="playerid" property="playerid" jdbcType="VARCHAR" />
 	</resultMap>
+	<select id="getPlayerItems" resultType="com.maxtop.walker.model.PlayerItem">
+		select itemId, usedAmount, playerid from t_player_item
+	</select>
 	<select id="getPlayerItem" resultType="com.maxtop.walker.model.PlayerItem">
 		select itemId, usedAmount, playerid from t_player_item where playerid = #{0} and itemId = #{1}
 	</select>
