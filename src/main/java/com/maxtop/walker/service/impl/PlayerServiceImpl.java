@@ -119,7 +119,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (parameters.containsKey("zbid")) paramMap.put("zbid", (String) parameters.get("zbid"));
 		if (parameters.containsKey("avatar")) paramMap.put("avatar", (String) parameters.get("avatar"));
 		if (parameters.containsKey("name")) paramMap.put("name", (String) parameters.get("name"));
-		if (parameters.containsKey("role")) paramMap.put("role", (String) parameters.get("role"));
+		if (parameters.containsKey("role")) paramMap.put("role", Role.getByName((String) parameters.get("role")).getCode());
 		if (parameters.containsKey("tel")) paramMap.put("tel", (String) parameters.get("tel"));
 		if (parameters.containsKey("zburl")) paramMap.put("zburl", (String) parameters.get("zburl"));
 		if (parameters.containsKey("room_id")) paramMap.put("room_id", (String) parameters.get("room_id"));
@@ -135,10 +135,6 @@ public class PlayerServiceImpl implements PlayerService {
 	public void update(String playerid, Map<String, Object> parameters) {
 		if (CollectionUtils.isEmpty(parameters)) return;
 		Player player = playerRepository.getById(playerid);
-		if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
-		if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
-		if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
-		if (parameters.containsKey("status")) player.setStatus((String) parameters.get("status"));
 		if (parameters.containsKey("tudou")) {
 			Map<String, Object> postParameters = new HashMap<String, Object>();
 			postParameters.put("playerid", Integer.parseInt(playerid));
@@ -153,6 +149,25 @@ public class PlayerServiceImpl implements PlayerService {
 				Map<String, Object> playerMap = (Map<String, Object>) playerInfoMap.get("data");
 				player.setTudou((String) playerMap.get("tudou"));
 			}
+		} else {
+			Map<String, Object> postParameters = new HashMap<String, Object>();
+			if (parameters.containsKey("lng")) postParameters.put("lng", (String) parameters.get("lng"));
+			if (parameters.containsKey("lat")) postParameters.put("lat", (String) parameters.get("lat"));
+			if (parameters.containsKey("role")) postParameters.put("role", Role.getByName((String) parameters.get("role")).getCode());
+			if (parameters.containsKey("status")) postParameters.put("status", Status.getByName((String) parameters.get("status")).getCode());
+			if (parameters.containsKey("name")) postParameters.put("name", (String) parameters.get("name"));
+			if (parameters.containsKey("tel")) postParameters.put("tel", (String) parameters.get("tel"));
+			if (parameters.containsKey("avatar")) postParameters.put("avatar", (String) parameters.get("avatar"));
+			@SuppressWarnings("unchecked")
+			Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
+			if (!"0".equals((String) result.get("code"))) throw new RuntimeException((String) result.get("msg"));
+			if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
+			if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
+			if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
+			if (parameters.containsKey("status")) player.setStatus((String) parameters.get("status"));
+			if (parameters.containsKey("name")) player.setName((String) parameters.get("name"));
+			if (parameters.containsKey("tel")) player.setTel((String) parameters.get("tel"));
+			if (parameters.containsKey("avatar")) player.setAvatar((String) parameters.get("avatar"));
 		}
 	}
 	
