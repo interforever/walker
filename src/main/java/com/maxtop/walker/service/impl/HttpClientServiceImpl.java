@@ -59,6 +59,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			}
 			uri = uri.substring(0, uri.length() - 1);
 		}
+		if (logger.isDebugEnabled()) logger.debug(uri);
 		HttpGet httpGet = new HttpGet(uri);
 		//		httpGet.setParams(params);
 		try {
@@ -102,6 +103,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			}
 			uri = uri.substring(0, uri.length() - 1);
 		}
+		if (logger.isDebugEnabled()) logger.debug(uri);
 		HttpPost httpPost = new HttpPost(uri);
 		//		httpPost.setParams(params);
 		try {
