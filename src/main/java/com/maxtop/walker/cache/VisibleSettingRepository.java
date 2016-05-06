@@ -43,7 +43,6 @@ public class VisibleSettingRepository implements InitializingBean, DisposableBea
 		logger.info("Start refreshing settings!");
 		for (Player player : playerRepository.list()) {
 			VisibleSetting visibleSetting = new VisibleSetting();
-			if (player.getShowForUser() == null) continue;
 			visibleSetting.setSubjectId("-1");
 			visibleSetting.setObjectId(player.getPlayerid());
 			visibleSetting.setVisible(Integer.parseInt(player.getShowForUser()));
