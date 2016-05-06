@@ -16,8 +16,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -59,7 +57,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			}
 			uri = uri.substring(0, uri.length() - 1);
 		}
-		if (logger.isDebugEnabled()) logger.debug(uri);
+		logger.info(uri);
 		HttpGet httpGet = new HttpGet(uri);
 		//		httpGet.setParams(params);
 		try {
@@ -73,7 +71,8 @@ public class HttpClientServiceImpl implements HttpClientService {
 				builder.append(line);
 				builder.append("\n");
 			}
-			if (logger.isDebugEnabled()) logger.debug(builder.toString());
+			//			if (logger.isDebugEnabled()) logger.debug(builder.toString());
+			logger.info(builder.toString());
 			Object result = gson.fromJson(builder.toString(), Object.class);
 			return result;
 		} catch (ClientProtocolException e) {
@@ -103,7 +102,7 @@ public class HttpClientServiceImpl implements HttpClientService {
 			}
 			uri = uri.substring(0, uri.length() - 1);
 		}
-		if (logger.isDebugEnabled()) logger.debug(uri);
+		logger.info(uri);
 		HttpPost httpPost = new HttpPost(uri);
 		//		httpPost.setParams(params);
 		try {
@@ -117,7 +116,8 @@ public class HttpClientServiceImpl implements HttpClientService {
 				builder.append(line);
 				builder.append("\n");
 			}
-			if (logger.isDebugEnabled()) logger.debug(builder.toString());
+			//			if (logger.isDebugEnabled()) logger.debug(builder.toString());
+			logger.info(builder.toString());
 			Object result = gson.fromJson(builder.toString(), Object.class);
 			return result;
 		} catch (ClientProtocolException e) {

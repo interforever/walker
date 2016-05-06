@@ -28,7 +28,7 @@ public class PlayerController {
 	private PlayerRepository playerRepository;
 	
 	@Autowired
-	private PlayerItemRepository playItemRepository;
+	private PlayerItemRepository playerItemRepository;
 	
 	@Autowired
 	private PlayerService playerService;
@@ -48,7 +48,8 @@ public class PlayerController {
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("player", player);
-			map.put("items", playItemRepository.getItemsById(player.getPlayerid()));
+			playerItemRepository.refresh();
+			map.put("items", playerItemRepository.getItemsById(player.getPlayerid()));
 			list.add(map);
 		}
 		return data;

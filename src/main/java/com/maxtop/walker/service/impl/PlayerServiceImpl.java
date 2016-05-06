@@ -158,6 +158,7 @@ public class PlayerServiceImpl implements PlayerService {
 			if (parameters.containsKey("name")) postParameters.put("name", (String) parameters.get("name"));
 			if (parameters.containsKey("tel")) postParameters.put("tel", (String) parameters.get("tel"));
 			if (parameters.containsKey("avatar")) postParameters.put("avatar", (String) parameters.get("avatar"));
+			if (parameters.containsKey("show_for_user")) postParameters.put("show_for_user", (String) parameters.get("show_for_user"));
 			@SuppressWarnings("unchecked")
 			Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
 			if (!"0".equals((String) result.get("code"))) throw new RuntimeException((String) result.get("msg"));
@@ -168,6 +169,7 @@ public class PlayerServiceImpl implements PlayerService {
 			if (parameters.containsKey("name")) player.setName((String) parameters.get("name"));
 			if (parameters.containsKey("tel")) player.setTel((String) parameters.get("tel"));
 			if (parameters.containsKey("avatar")) player.setAvatar((String) parameters.get("avatar"));
+			if (parameters.containsKey("show_for_user")) player.setShowForUser((String) parameters.get("show_for_user"));
 		}
 	}
 	

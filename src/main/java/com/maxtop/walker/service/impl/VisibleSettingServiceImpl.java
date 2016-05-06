@@ -1,7 +1,9 @@
 
 package com.maxtop.walker.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,11 @@ public class VisibleSettingServiceImpl implements VisibleSettingService {
 	}
 	
 	public void switchVisible(String subject, String object, Integer visible) {
+		if ("-1".equals(subject)) {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("show_for_user", visible.toString());
+			playerService.update(object, parameters);
+		}
 		if (CollectionUtils.isEmpty(visibleSettingDao.getVisibleSetting(subject, object))) {
 			visibleSettingDao.addVisibleSetting(subject, object, visible);
 			visibleSettingRepository.addVisibleSetting(subject, object, visible);

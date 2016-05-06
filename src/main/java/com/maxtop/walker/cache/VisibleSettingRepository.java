@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.maxtop.walker.dao.VisibleSettingDao;
+import com.maxtop.walker.model.Player;
 import com.maxtop.walker.model.VisibleSetting;
 import com.maxtop.walker.service.VisibleSettingService;
 
@@ -35,8 +36,30 @@ public class VisibleSettingRepository implements InitializingBean, DisposableBea
 	@Autowired
 	private VisibleSettingService visibleSettingService;
 	
+	@Autowired
+	private PlayerRepository playerRepository;
+	
 	private void refresh() {
 		logger.info("Start refreshing settings!");
+		for (Player player : playerRepository.list()) {
+			VisibleSetting visibleSetting = new VisibleSetting();
+			visibleSetting.setSubjectId("-1");
+			visibleSetting.setObjectId(player.getPlayerid());
+			visibleSetting.setVisible(Integer.parseInt(player.getShowForUser()));
+			this.visibleSettings.add(visibleSetting);
+			Map<String, VisibleSetting> sObjectMap = subjectMap.get(visibleSetting.getSubjectId());
+			if (sObjectMap == null) {
+				sObjectMap = new HashMap<String, VisibleSetting>();
+				subjectMap.put(visibleSetting.getSubjectId(), sObjectMap);
+			}
+			sObjectMap.put(visibleSetting.getObjectId(), visibleSetting);
+			Map<String, VisibleSetting> oSubjectMap = objectMap.get(visibleSetting.getObjectId());
+			if (oSubjectMap == null) {
+				oSubjectMap = new HashMap<String, VisibleSetting>();
+				objectMap.put(visibleSetting.getObjectId(), oSubjectMap);
+			}
+			oSubjectMap.put(visibleSetting.getSubjectId(), visibleSetting);
+		}
 		List<VisibleSetting> visibleSettings = visibleSettingDao.getVisibleSettings();
 		if (CollectionUtils.isEmpty(visibleSettings)) {
 			logger.info("Refresh settings failed!");
