@@ -16,6 +16,8 @@ public interface PlayerService {
 
 	public void delete(String playerid);
 
+	public int getPlayerAudienceCount(String playerid);
+
 	public List<String> getAudienceAvatars(String playerid);
 	
 }

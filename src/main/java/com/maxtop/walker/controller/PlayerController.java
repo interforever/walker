@@ -42,6 +42,7 @@ public class PlayerController {
 		playerItemRepository.refresh();
 		for (Player player : playerRepository.list()) {
 			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
+			player.setAudience(playerService.getPlayerAudienceCount(player.getPlayerid()));
 			List<Map<String, Object>> list = data.get(player.getRole());
 			if (list == null) {
 				list = new ArrayList<Map<String, Object>>();

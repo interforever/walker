@@ -98,7 +98,7 @@ public class PlayerServiceImpl implements PlayerService {
 		return players;
 	}
 	
-	private int getPlayerAudienceCount(String playerid) {
+	public int getPlayerAudienceCount(String playerid) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("playerid", playerid);
 		@SuppressWarnings("unchecked")
