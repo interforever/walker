@@ -37,8 +37,9 @@ public class AuthenticateFilter implements Filter {
 		filterChain.doFilter(req, res);
 	}
 	
-	public void init(FilterConfig arg0) throws ServletException {
-		// do nothing
+	public void init(FilterConfig filterConfig) throws ServletException {
+		String ignore = filterConfig.getInitParameter("ignore");
+		this.setIgnore(ignore);
 	}
 	
 }
