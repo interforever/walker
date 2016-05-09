@@ -100,6 +100,7 @@ public class VisibleSettingRepository implements InitializingBean, DisposableBea
 	}
 	
 	public VisibleSetting getVisibleSetting(String subject, String object) {
+		if (subjectMap.get(subject) == null) return null;
 		return subjectMap.get(subject).get(object);
 	}
 	

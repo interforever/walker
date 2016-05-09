@@ -205,7 +205,7 @@ public class Player {
 	
 	public enum Role {
 		
-		ESCAPEE("1", "逃亡者"), CHASER("2", "追捕者"), CANDIDATE("3", "候补者"), BASE("4", "基地"), PRISON("5", "监狱"), CASINO("6", "赌场"), SAFE_HOUSE("7", "安全屋"), ARENA("8", "角斗场"), MOBILE_TRADER("9", "移动商贩"), SKY_EYE("10", "天眼");
+		ESCAPEE("1", "鼠"), CHASER("2", "猫"), CANDIDATE("3", "候补者"), BASE("4", "基地"), PRISON("5", "监狱"), CASINO("6", "赌场"), SAFE_HOUSE("7", "安全屋"), ARENA("8", "角斗场"), MOBILE_TRADER("9", "移动商贩"), SKY_EYE("10", "天眼");
 		
 		private String code;
 		
@@ -250,7 +250,7 @@ public class Player {
 	
 	public enum Status {
 		
-		NORMAL("1", "正常"), JAILED("2", "入狱"), ELIMINATED("3", "淘汰");
+		NORMAL("1", "活跃状态"), JAILED("2", "监狱状态"), ELIMINATED("3", "待激活状态");
 		
 		private String code;
 		

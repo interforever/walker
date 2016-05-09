@@ -68,7 +68,7 @@ public class PlayerServiceImpl implements PlayerService {
 		List<Player> players = new ArrayList<Player>();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) httpClientService.executeGetService(playerListUrl, null);
-		if (!"0".equals((String) map.get("code"))) return null;
+		if (!"0".equals(map.get("code").toString())) return null;
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> playerMaps = (List<Map<String, Object>>) map.get("data");
 		for (Map<String, Object> playerMap : playerMaps) {
@@ -88,7 +88,7 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setShowForUser((String) playerMap.get("show_for_user"));
 			player.setAvatar((String) playerMap.get("avatar"));
 			player.setLat((String) playerMap.get("lat"));
-			player.setRoomId((String) playerMap.get("roomId"));
+			player.setRoomId((String) playerMap.get("room_id"));
 			player.setLng((String) playerMap.get("lng"));
 			player.setShowForPlayer((String) playerMap.get("show_for_player"));
 			player.setDescription((String) playerMap.get("description"));
@@ -105,7 +105,7 @@ public class PlayerServiceImpl implements PlayerService {
 		Map<String, Object> audienceMap = (Map<String, Object>) httpClientService.executePostService(playerAudienceCountUrl, paramMap);
 		if (audienceMap == null) return 0;
 		if (!audienceMap.containsKey("code")) return 0;
-		if (((Number) audienceMap.get("code")).intValue() != 0) return 0;
+		if (!"0".equals(audienceMap.get("code").toString())) return 0;
 		@SuppressWarnings("unchecked")
 		Map<String, Object> audienceCountMap = (Map<String, Object>) audienceMap.get("data");
 		if (audienceCountMap == null) return 0;
@@ -127,7 +127,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (parameters.containsKey("lat")) paramMap.put("lat", (String) parameters.get("lat"));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerAddUrl, paramMap);
-		if (((Number) result.get("code")).intValue() != 0) throw new RuntimeException((String) result.get("msg"));
+		if (!"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
 		playerRepository.refresh();
 		playerItemRepository.refresh();
 	}
@@ -144,7 +144,7 @@ public class PlayerServiceImpl implements PlayerService {
 			getParameters.put("playerid", playerid);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> playerInfoMap = (Map<String, Object>) httpClientService.executeGetService(playerInfoUrl, getParameters);
-			if (((Number) playerInfoMap.get("code")).intValue() == 0) {
+			if ("0".equals(playerInfoMap.get("code").toString())) {
 				@SuppressWarnings("unchecked")
 				Map<String, Object> playerMap = (Map<String, Object>) playerInfoMap.get("data");
 				player.setTudou((String) playerMap.get("tudou"));
@@ -162,7 +162,7 @@ public class PlayerServiceImpl implements PlayerService {
 			if (parameters.containsKey("show_for_user")) postParameters.put("show_for_user", (String) parameters.get("show_for_user"));
 			@SuppressWarnings("unchecked")
 			Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
-			if (((Number) result.get("code")).intValue() != 0) throw new RuntimeException((String) result.get("msg"));
+			if (!"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
 			if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
 			if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
 			if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
@@ -179,7 +179,7 @@ public class PlayerServiceImpl implements PlayerService {
 		paramMap.put("playerid", playerid);
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerDeleteUrl, paramMap);
-		if (!"0".equals((String) result.get("code"))) return;
+		if (!"0".equals(result.get("code").toString())) return;
 		playerRepository.removePlayer(playerid);
 	}
 	

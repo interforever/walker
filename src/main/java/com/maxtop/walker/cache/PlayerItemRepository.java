@@ -41,7 +41,7 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 				this.playerItemsMap.put(entry.getKey(), entry.getValue());
 			}
 			for (PlayerItem playerItem : playerItemDao.getPlayerItems()) {
-				if (!playerItemsMap.containsKey(playerItem.getPlayerid())) continue;
+				if (playerItemsMap.get(playerItem.getPlayerid()) == null) continue;
 				for (PlayerItem item : playerItemsMap.get(playerItem.getPlayerid())) {
 					if (item.getItemId().equals(playerItem.getItemId())) {
 						item.setUsedAmount(playerItem.getUsedAmount());
