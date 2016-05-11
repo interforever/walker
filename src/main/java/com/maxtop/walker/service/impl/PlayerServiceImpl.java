@@ -162,7 +162,7 @@ public class PlayerServiceImpl implements PlayerService {
 			if (parameters.containsKey("show_for_user")) postParameters.put("show_for_user", (String) parameters.get("show_for_user"));
 			@SuppressWarnings("unchecked")
 			Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
-			if (!"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
+			if (!result.containsKey("code") || !"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
 			if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
 			if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
 			if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
@@ -185,11 +185,16 @@ public class PlayerServiceImpl implements PlayerService {
 	
 	public List<String> getAudienceAvatars(String playerid) {
 		int audienceCount = playerRepository.getById(playerid).getAudience();
-		if (audienceCount < playerAudienceAvatarLimit) audienceCount = playerAudienceAvatarLimit;
+		if (audienceCount > playerAudienceAvatarLimit) audienceCount = playerAudienceAvatarLimit;
 		List<String> urls = new ArrayList<String>();
 		for (int i = 0; i < audienceCount; i++) {
 			int avatarId = (int) (Math.random() * audienceFakerAvatarCount) + 1;
-			urls.add(audienceFakerAvatarUrl + avatarId + ".jpg");
+			String url = audienceFakerAvatarUrl + avatarId + ".jpg";
+			if (urls.contains(url)) {
+				i--;
+				continue;
+			}
+			urls.add(url);
 		}
 		return urls;
 	}

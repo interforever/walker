@@ -1,6 +1,8 @@
 
 package com.maxtop.walker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Player {
 	
 	private String status;
@@ -115,6 +117,7 @@ public class Player {
 		this.zburl = zburl;
 	}
 	
+	@JsonIgnore
 	public String getJail_time() {
 		return jail_time;
 	}
@@ -131,6 +134,7 @@ public class Player {
 		this.rank = rank;
 	}
 	
+	@JsonIgnore
 	public String getShowForUser() {
 		return showForUser;
 	}
@@ -179,6 +183,7 @@ public class Player {
 		this.lng = lng;
 	}
 	
+	@JsonIgnore
 	public String getShowForPlayer() {
 		return showForPlayer;
 	}
@@ -187,6 +192,7 @@ public class Player {
 		this.showForPlayer = showForPlayer;
 	}
 	
+	@JsonIgnore
 	public String getDescription() {
 		return description;
 	}

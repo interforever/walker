@@ -23,6 +23,38 @@
 
 	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
 	<context:component-scan
-		base-package="com.maxtop.walker.cache, com.maxtop.walker.service" />
+		base-package="com.maxtop.walker.cache, com.maxtop.walker.service, com.maxtop.walker.job" />
+
+	<!-- 定义触发时间 -->
+	<!-- <bean id="doTimeSync"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="jobtaskSync" />
+		</property>
+		<property name="cronExpression">
+			<value>0/30 * * * * ?</value>
+		</property>
+	</bean> -->
+
+	<!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+	<!-- <bean id="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="doTimeSync" />
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.scheduler.instanceName">buy_it_now</prop>
+				<prop key="org.quartz.threadPool.threadCount">2</prop>
+				<prop key="org.quartz.plugin.shutdownhook.class">org.quartz.plugins.management.ShutdownHookPlugin
+				</prop>
+				<prop key="org.quartz.plugin.shutdownhook.cleanShutdown">true</prop>
+				<prop
+					key="org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread">true</prop>
+			</props>
+		</property>
+	</bean> -->
 
 </beans>

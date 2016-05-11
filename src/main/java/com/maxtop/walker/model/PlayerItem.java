@@ -1,6 +1,8 @@
 
 package com.maxtop.walker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PlayerItem {
 	
 	private Integer categoryId;
@@ -37,6 +39,7 @@ public class PlayerItem {
 	
 	private String playerid;
 	
+	@JsonIgnore
 	public Integer getCategoryId() {
 		return categoryId;
 	}
@@ -53,6 +56,7 @@ public class PlayerItem {
 		this.itemId = itemId;
 	}
 	
+	@JsonIgnore
 	public String getHeadImage() {
 		return headImage;
 	}
@@ -61,6 +65,7 @@ public class PlayerItem {
 		this.headImage = headImage;
 	}
 	
+	@JsonIgnore
 	public Integer getFinalItemId() {
 		return finalItemId;
 	}
@@ -109,6 +114,7 @@ public class PlayerItem {
 		this.playerNeed = playerNeed;
 	}
 	
+	@JsonIgnore
 	public Integer getId() {
 		return id;
 	}
@@ -125,6 +131,7 @@ public class PlayerItem {
 		this.fundTotalAmount = fundTotalAmount;
 	}
 	
+	@JsonIgnore
 	public String getDesc() {
 		return desc;
 	}
@@ -133,6 +140,7 @@ public class PlayerItem {
 		this.desc = desc;
 	}
 	
+	@JsonIgnore
 	public String getCategoryName() {
 		return categoryName;
 	}
@@ -141,6 +149,7 @@ public class PlayerItem {
 		this.categoryName = categoryName;
 	}
 	
+	@JsonIgnore
 	public Integer getPrice() {
 		return price;
 	}
@@ -157,6 +166,7 @@ public class PlayerItem {
 		this.picUrl = picUrl;
 	}
 	
+	@JsonIgnore
 	public String getLabelName() {
 		return labelName;
 	}

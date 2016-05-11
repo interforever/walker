@@ -30,17 +30,20 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 	@Autowired
 	private PlayerItemDao playerItemDao;
 	
-	synchronized public void refresh() {
+	@Autowired
+	private PlayerRepository playerRepository;
+	
+	public void refresh() {
 		logger.info("Start refreshing player items!");
 		Map<String, List<PlayerItem>> playerItemsMap = playerItemService.list();
 		if (CollectionUtils.isEmpty(playerItemsMap)) {
 			logger.info("Refresh player items failed!");
 		} else {
-			clear();
+			List<PlayerItem> palyerItems = playerItemDao.getPlayerItems();
 			for (Map.Entry<String, List<PlayerItem>> entry : playerItemsMap.entrySet()) {
 				this.playerItemsMap.put(entry.getKey(), entry.getValue());
 			}
-			for (PlayerItem playerItem : playerItemDao.getPlayerItems()) {
+			for (PlayerItem playerItem : palyerItems) {
 				if (playerItemsMap.get(playerItem.getPlayerid()) == null) continue;
 				for (PlayerItem item : playerItemsMap.get(playerItem.getPlayerid())) {
 					if (item.getItemId().equals(playerItem.getItemId())) {
@@ -57,7 +60,7 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 		playerItemsMap.clear();
 	}
 	
-	synchronized public List<PlayerItem> getItemsById(String playerid) {
+	public List<PlayerItem> getItemsById(String playerid) {
 		return playerItemsMap.get(playerid);
 	}
 	

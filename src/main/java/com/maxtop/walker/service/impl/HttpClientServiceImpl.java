@@ -16,6 +16,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,9 +41,17 @@ public class HttpClientServiceImpl implements HttpClientService {
 	@Value("${youku.http.secret:fc5e03}")
 	private String secret;
 	
+	@Value("${connection.timeout.millis:10000}")
+	private int connectionTimeoutMillis;
+	
+	@Value("${socket.timeout.millis:10000}")
+	private int socketTimeoutMillis;
+	
 	public Object executeGetService(String uri, Map<String, String> paramMap) {
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		//		HttpParams params = new BasicHttpParams();
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(params, connectionTimeoutMillis);
+		HttpConnectionParams.setSoTimeout(params, socketTimeoutMillis);
+		DefaultHttpClient httpClient = new DefaultHttpClient(params);
 		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		//		params.setParameter("_k_", key);
 		//		params.setParameter("_t_", timestamp);
@@ -83,7 +94,10 @@ public class HttpClientServiceImpl implements HttpClientService {
 	}
 	
 	public Object executePostService(String uri, Map<String, Object> paramMap) {
-		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(params, connectionTimeoutMillis);
+		HttpConnectionParams.setSoTimeout(params, socketTimeoutMillis);
+		DefaultHttpClient httpClient = new DefaultHttpClient(params);
 		//		HttpParams params = new BasicHttpParams();
 		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
 		//		params.setParameter("_k_", key);

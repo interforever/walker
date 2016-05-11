@@ -39,10 +39,10 @@ public class PlayerController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Map<String, List<Map<String, Object>>> getList() {
 		Map<String, List<Map<String, Object>>> data = new HashMap<String, List<Map<String, Object>>>();
-		playerItemRepository.refresh();
+		//		playerItemRepository.refresh();
 		for (Player player : playerRepository.list()) {
 			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
-			player.setAudience(playerService.getPlayerAudienceCount(player.getPlayerid()));
+			//			player.setAudience(playerService.getPlayerAudienceCount(player.getPlayerid()));
 			List<Map<String, Object>> list = data.get(player.getRole());
 			if (list == null) {
 				list = new ArrayList<Map<String, Object>>();
