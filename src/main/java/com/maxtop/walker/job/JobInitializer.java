@@ -16,27 +16,31 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RefreshiServerInitializer implements InitializingBean, DisposableBean {
+public class JobInitializer implements InitializingBean, DisposableBean {
 	
 	@Value("${mail.send.interval:10000}")
-	private long REPEAT_INTERVAL;
+	private long refreshInterval;
+	
+	@Value("${submit.coordinate.interval:5000}")
+	private long submitCoordinateInterval;
 	
 	private Scheduler scheduler;
 	
 	public void afterPropertiesSet() throws Exception {
-		createJob(RefreshJob.class);
+		createJob(RefreshJob.class, "refreshTrigger", refreshInterval);
+		createJob(SubmitCoordinateJob.class, "submitCoordinateTrigger", submitCoordinateInterval);
 	}
 	
 	public void destroy() throws Exception {
 		scheduler.shutdown();
 	}
 	
-	private void createJob(final Class<? extends Job> jobClass) {
+	private void createJob(final Class<? extends Job> jobClass, String name, long interval) {
 		try {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			final JobDetail job = JobBuilder.newJob(jobClass).build();
 			@SuppressWarnings("deprecation")
-			final Trigger trigger = new SimpleTriggerImpl("mailTrigger", SimpleTrigger.REPEAT_INDEFINITELY, REPEAT_INTERVAL);
+			final Trigger trigger = new SimpleTriggerImpl(name, SimpleTrigger.REPEAT_INDEFINITELY, interval);
 			scheduler.scheduleJob(job, trigger);
 			scheduler.start();
 		} catch (final SchedulerException ex) {

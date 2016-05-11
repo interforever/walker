@@ -151,18 +151,20 @@ public class PlayerServiceImpl implements PlayerService {
 			}
 		} else {
 			Map<String, Object> postParameters = new HashMap<String, Object>();
-			postParameters.put("playerid", Integer.parseInt(playerid));
-			if (parameters.containsKey("lng")) postParameters.put("lng", (String) parameters.get("lng"));
-			if (parameters.containsKey("lat")) postParameters.put("lat", (String) parameters.get("lat"));
+			//			if (parameters.containsKey("lng")) postParameters.put("lng", (String) parameters.get("lng"));
+			//			if (parameters.containsKey("lat")) postParameters.put("lat", (String) parameters.get("lat"));
 			if (parameters.containsKey("role")) postParameters.put("role", Role.getByName((String) parameters.get("role")).getCode());
 			if (parameters.containsKey("status")) postParameters.put("status", Status.getByName((String) parameters.get("status")).getCode());
 			if (parameters.containsKey("name")) postParameters.put("name", (String) parameters.get("name"));
 			if (parameters.containsKey("tel")) postParameters.put("tel", (String) parameters.get("tel"));
 			if (parameters.containsKey("avatar")) postParameters.put("avatar", (String) parameters.get("avatar"));
 			if (parameters.containsKey("show_for_user")) postParameters.put("show_for_user", (String) parameters.get("show_for_user"));
-			@SuppressWarnings("unchecked")
-			Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
-			if (!result.containsKey("code") || !"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
+			if (!postParameters.isEmpty()) {
+				postParameters.put("playerid", Integer.parseInt(playerid));
+				@SuppressWarnings("unchecked")
+				Map<String, Object> result = (Map<String, Object>) httpClientService.executePostService(playerUpdateUrl, postParameters);
+				if (!result.containsKey("code") || !"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
+			}
 			if (parameters.containsKey("lng")) player.setLng((String) parameters.get("lng"));
 			if (parameters.containsKey("lat")) player.setLat((String) parameters.get("lat"));
 			if (parameters.containsKey("role")) player.setRole((String) parameters.get("role"));
@@ -197,6 +199,10 @@ public class PlayerServiceImpl implements PlayerService {
 			urls.add(url);
 		}
 		return urls;
+	}
+	
+	public String getPlayerUpdateUrl() {
+		return playerUpdateUrl;
 	}
 	
 }
