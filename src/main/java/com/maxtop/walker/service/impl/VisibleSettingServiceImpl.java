@@ -46,4 +46,14 @@ public class VisibleSettingServiceImpl implements VisibleSettingService {
 		}
 	}
 	
+	public void setAllVisible() {
+		//		visibleSettingDao.setAllVisible();
+		//		visibleSettingRepository.setAllVisible();
+	}
+	
+	public void setAllInvisible() {
+		//		visibleSettingDao.setAllInvisible();
+		//		visibleSettingRepository.setAllInvisible();
+	}
+	
 }

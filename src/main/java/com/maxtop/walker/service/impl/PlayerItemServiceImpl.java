@@ -101,4 +101,19 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 			}
 		}
 	}
+
+	public void setPlayerItemAllowable(String playerid, String itemid, Integer allow) {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	public void setAllPlayerItemsAllow() {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	public void setAllPlayerItemsDisallow() {
+	    // TODO Auto-generated method stub
+	    
+    }
 }

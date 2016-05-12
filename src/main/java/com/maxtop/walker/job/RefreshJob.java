@@ -18,6 +18,13 @@ public class RefreshJob implements Job {
 		try {
 			PlayerRepository playerRepository = (PlayerRepository) SpringBeanUtils.getBean("playerRepository");
 			PlayerService playerService = (PlayerService) SpringBeanUtils.getBean("playerServiceImpl");
+			for (Player player : playerService.list()) {
+				Player p = playerRepository.getById(player.getPlayerid());
+				p.setMoney(player.getMoney());
+				p.setMoneyRank(player.getMoneyRank());
+				p.setRank(player.getRank());
+				p.setTudou(player.getTudou());
+			}
 			for (Player player : playerRepository.list()) {
 				if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
 				player.setAudience(playerService.getPlayerAudienceCount(player.getPlayerid()));

@@ -31,7 +31,7 @@ public class NotificationServiceImpl implements NotificationService {
 	public List<Notification> list() {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) httpClientService.executeGetService(settingNotificationListUrl, null);
-		if (!"0".equals(map.get("code").toString())) return null;
+		if (!"0.0".equals(map.get("code").toString())) return null;
 		List<Notification> notifications = new ArrayList<Notification>();
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> notificationMaps = (List<Map<String, Object>>) map.get("data");

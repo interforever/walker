@@ -10,5 +10,9 @@ public interface VisibleSettingService {
 	public List<VisibleSetting> list();
 	
 	public void switchVisible(String subject, String object, Integer visible);
+
+	public void setAllVisible();
+
+	public void setAllInvisible();
 	
 }

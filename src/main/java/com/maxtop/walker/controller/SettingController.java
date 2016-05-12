@@ -17,9 +17,10 @@ import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.cache.VisibleSettingRepository;
 import com.maxtop.walker.model.Notification;
 import com.maxtop.walker.model.Player;
-import com.maxtop.walker.model.Setting;
 import com.maxtop.walker.model.Player.Role;
+import com.maxtop.walker.model.Setting;
 import com.maxtop.walker.service.NotificationService;
+import com.maxtop.walker.service.PlayerItemService;
 import com.maxtop.walker.service.SettingService;
 import com.maxtop.walker.service.VisibleSettingService;
 
@@ -32,6 +33,9 @@ public class SettingController {
 	
 	@Autowired
 	private PlayerRepository playerRepository;
+	
+	@Autowired
+	private PlayerItemService playerItemService;
 	
 	@Autowired
 	private SettingService settingService;
@@ -96,6 +100,44 @@ public class SettingController {
 	@RequestMapping(value = "/visible/{subject}/{object}/{visible}", method = RequestMethod.GET)
 	public void switchVisible(@PathVariable String subject, @PathVariable String object, @PathVariable Integer visible) {
 		visibleSettingService.switchVisible(subject, object, visible);
+	}
+	
+	@RequestMapping(value = "/visible/all/on", method = RequestMethod.GET)
+	public void setAllVisible() {
+		visibleSettingService.setAllVisible();
+	}
+	
+	@RequestMapping(value = "/visible/all/off", method = RequestMethod.GET)
+	public void setAllInvisible() {
+		visibleSettingService.setAllInvisible();
+	}
+	
+	@RequestMapping(value = "/playeritem/", method = RequestMethod.GET)
+	public Map<String, Object> getPlayerItemSettings() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Player> players = new ArrayList<Player>();
+		for (Player player : playerRepository.list()) {
+			if (Role.isBuilding(Role.getByName(player.getRole()))) continue;
+			players.add(player);
+		}
+		map.put("players", players);
+		//		map.put("visibleSettings", visibleSettingRepository.getVisibleSettings());
+		return map;
+	}
+	
+	@RequestMapping(value = "/playeritem/{playerid}/{itemid}/{allow}", method = RequestMethod.GET)
+	public void setPlayerItemAllowable(@PathVariable String playerid, @PathVariable String itemid, @PathVariable Integer allow) {
+		playerItemService.setPlayerItemAllowable(playerid, itemid, allow);
+	}
+	
+	@RequestMapping(value = "/playeritem/all/allow", method = RequestMethod.GET)
+	public void setAllPlayerItemsAllow() {
+		playerItemService.setAllPlayerItemsAllow();
+	}
+	
+	@RequestMapping(value = "/playeritem/all/disallow", method = RequestMethod.GET)
+	public void setAllPlayerItemsDisallow() {
+		playerItemService.setAllPlayerItemsDisallow();
 	}
 	
 }

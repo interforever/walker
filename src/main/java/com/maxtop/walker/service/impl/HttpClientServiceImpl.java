@@ -71,12 +71,13 @@ public class HttpClientServiceImpl implements HttpClientService {
 		if (logger.isDebugEnabled()) logger.debug(uri);
 		HttpGet httpGet = new HttpGet(uri);
 		//		httpGet.setParams(params);
+		StringBuilder builder = null;
 		try {
 			HttpResponse response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
 			InputStream instream = entity.getContent();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(instream, "UTF-8"));
-			StringBuilder builder = new StringBuilder();
+			builder = new StringBuilder();
 			String line = "";
 			while ((line = reader.readLine()) != null) {
 				builder.append(line);
@@ -87,8 +88,10 @@ public class HttpClientServiceImpl implements HttpClientService {
 			return result;
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
+			if (builder != null) logger.error(uri + " : " + builder);
 		} catch (IOException e) {
 			e.printStackTrace();
+			if (builder != null) logger.error(uri + " : " + builder);
 		}
 		return null;
 	}
@@ -118,12 +121,13 @@ public class HttpClientServiceImpl implements HttpClientService {
 		if (logger.isDebugEnabled()) logger.debug(uri);
 		HttpPost httpPost = new HttpPost(uri);
 		//		httpPost.setParams(params);
+		StringBuilder builder = null;
 		try {
 			HttpResponse response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
 			InputStream instream = entity.getContent();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(instream, "UTF-8"));
-			StringBuilder builder = new StringBuilder();
+			builder = new StringBuilder();
 			String line = "";
 			while ((line = reader.readLine()) != null) {
 				builder.append(line);
@@ -134,8 +138,10 @@ public class HttpClientServiceImpl implements HttpClientService {
 			return result;
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
+			if (builder != null) logger.error(uri + " : " + builder);
 		} catch (IOException e) {
 			e.printStackTrace();
+			if (builder != null) logger.error(uri + " : " + builder);
 		}
 		return null;
 	}

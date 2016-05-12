@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
 	@Value("${login.username:admin}")
 	private String username;
 	
-	@Value("${login.password:woaijinsheng}")
+	@Value("${login.password:#EDC6yhn(OL>}")
 	private String password;
 	
 	public void login(String username, String password) {

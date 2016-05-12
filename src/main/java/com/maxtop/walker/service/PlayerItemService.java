@@ -11,5 +11,11 @@ public interface PlayerItemService {
 	public Map<String, List<PlayerItem>> list();
 
 	public void update(String playerid, String itemid, Map<String, Object> parameters);
+
+	public void setPlayerItemAllowable(String playerid, String itemid, Integer allow);
+
+	public void setAllPlayerItemsAllow();
+
+	public void setAllPlayerItemsDisallow();
 	
 }

@@ -17,6 +17,7 @@ import com.maxtop.walker.cache.PlayerItemRepository;
 import com.maxtop.walker.cache.PlayerRepository;
 import com.maxtop.walker.model.Player;
 import com.maxtop.walker.model.Player.Role;
+import com.maxtop.walker.model.PlayerItem;
 import com.maxtop.walker.service.PlayerItemService;
 import com.maxtop.walker.service.PlayerService;
 
@@ -48,9 +49,14 @@ public class PlayerController {
 				list = new ArrayList<Map<String, Object>>();
 				data.put(player.getRole(), list);
 			}
+			List<PlayerItem> items = new ArrayList<PlayerItem>();
+			for (PlayerItem item : playerItemRepository.getItemsById(player.getPlayerid())) {
+				if (item.getUsedAmount() == item.getMixAmount()) continue;
+				items.add(item);
+			}
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("player", player);
-			map.put("items", playerItemRepository.getItemsById(player.getPlayerid()));
+			map.put("items", items);
 			list.add(map);
 		}
 		return data;
@@ -64,6 +70,14 @@ public class PlayerController {
 			players.add(player);
 		}
 		return players;
+	}
+	
+	@RequestMapping(value = "/{playerid}", method = RequestMethod.GET)
+	public Map<String, Object> getPlayer(@PathVariable String playerid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("player", playerRepository.getById(playerid));
+		map.put("items", playerItemRepository.getItemsById(playerid));
+		return map;
 	}
 	
 	@RequestMapping(value = "/building/list", method = RequestMethod.GET)
