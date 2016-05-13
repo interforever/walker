@@ -148,6 +148,7 @@ public class PlayerServiceImpl implements PlayerService {
 				@SuppressWarnings("unchecked")
 				Map<String, Object> playerMap = (Map<String, Object>) playerInfoMap.get("data");
 				player.setTudou((String) playerMap.get("tudou"));
+				if (playerMap.get("rank") != null) player.setRank(((Number) playerMap.get("rank")).intValue());
 			}
 		} else {
 			Map<String, Object> postParameters = new HashMap<String, Object>();

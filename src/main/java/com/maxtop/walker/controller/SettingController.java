@@ -121,7 +121,8 @@ public class SettingController {
 			players.add(player);
 		}
 		map.put("players", players);
-		//		map.put("visibleSettings", visibleSettingRepository.getVisibleSettings());
+		map.put("items", playerItemService.getSimpleList());
+		map.put("allow", playerItemService.getAllowList());
 		return map;
 	}
 	

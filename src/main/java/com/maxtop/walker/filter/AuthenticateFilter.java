@@ -1,7 +1,9 @@
 
 package com.maxtop.walker.filter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
 import com.maxtop.walker.utils.GsonBuilderFactory;
@@ -47,6 +50,21 @@ public class AuthenticateFilter implements Filter {
 		}
 		Object username = request.getSession().getAttribute("username");
 		String cnmlgb = request.getParameter("cnmlgb");
+		if (username == null && cnmlgb == null) {
+			if (request.getRequestURI().startsWith("/walker/map/")) {
+				cnmlgb = "cspjddsw8dwcnzz18d";
+			} else {
+				String body = this.getRequestBody(request);
+				if (!StringUtils.isEmpty(body)) {
+					try {
+						Map<String, Object> map = gson.fromJson(body, Map.class);
+						if (map.containsKey("cnmlgb")) cnmlgb = (String) map.get("cnmlgb");
+						if (map.containsKey("lat") && map.containsKey("lng")) cnmlgb = "cspjddsw8dwcnzz18d";
+					} finally {
+					}
+				}
+			}
+		}
 		if (username == null && !"cspjddsw8dwcnzz18d".equals(cnmlgb)) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", HttpStatus.UNAUTHORIZED.value());
@@ -60,6 +78,30 @@ public class AuthenticateFilter implements Filter {
 			return;
 		}
 		filterChain.doFilter(req, res);
+	}
+	
+	private String getRequestBody(HttpServletRequest request) {
+		BufferedReader reader = null;
+		StringBuilder sb = new StringBuilder();
+		try {
+			reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "utf-8"));
+			String line = null;
+			
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (null != reader) {
+					reader.close();
+				}
+			} catch (IOException e) {
+				
+			}
+		}
+		return sb.toString();
 	}
 	
 	public void init(FilterConfig filterConfig) throws ServletException {

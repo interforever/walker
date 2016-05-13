@@ -25,6 +25,15 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 	@Value("${player.item.list.url:http://api.zb.youku.com/api/v1/zb/player/fundings}")
 	private String playerItemListUrl;
 	
+	@Value("${player.item.allow.list.url:http://api.zb.youku.com/api/v1/player/fund/allow/info}")
+	private String playerItemAllowListUrl;
+	
+	@Value("${player.item.allow.url:http://api.zb.youku.com/api/v1/player/fund/allow}")
+	private String playerItemAllowUrl;
+	
+	@Value("${player.item.allows.url:http://api.zb.youku.com/api/v1/player/funds/allow}")
+	private String playerItemAllowsUrl;
+	
 	@Autowired
 	private HttpClientService httpClientService;
 	
@@ -43,6 +52,37 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 			playerItemsMap.put(player.getPlayerid(), this.getPlayerItemsById(player.getPlayerid()));
 		}
 		return playerItemsMap;
+	}
+	
+	public List<Map<String, Object>> getSimpleList() {
+		List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+		for (PlayerItem playerItem : playerItemRepository.getItemsById(playerRepository.list().iterator().next().getPlayerid())) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("title", playerItem.getTitle());
+			map.put("id", playerItem.getId());
+			maps.add(map);
+		}
+		return maps;
+	}
+	
+	public List<Map<String, Object>> getAllowList() {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map = (Map<String, Object>) httpClientService.executeGetService(playerItemAllowListUrl, null);
+		if (!"0".equals(map.get("code").toString())) return null;
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> itemMaps = (List<Map<String, Object>>) map.get("data");
+		List<Map<String, Object>> allowMaps = new ArrayList<Map<String, Object>>();
+		for (Map<String, Object> itemMap : itemMaps) {
+			String id = (String) itemMap.get("id");
+			@SuppressWarnings("unchecked")
+			Map<String, String> allowInfo = (Map<String, String>) itemMap.get("allow_info");
+			Map<String, Object> allowMap = new HashMap<String, Object>();
+			allowMap.put("id", id);
+			allowMap.put("playerid", allowInfo.keySet().iterator().next());
+			allowMap.put("allow", allowInfo.values().iterator().next());
+			allowMaps.add(allowMap);
+		}
+		return allowMaps;
 	}
 	
 	private List<PlayerItem> getPlayerItemsById(String playerid) {
@@ -101,19 +141,43 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 			}
 		}
 	}
-
+	
 	public void setPlayerItemAllowable(String playerid, String itemid, Integer allow) {
-	    // TODO Auto-generated method stub
-	    
-    }
-
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("playerid", playerid);
+		parameters.put("fund_id", itemid);
+		parameters.put("allow", allow);
+		httpClientService.executePostService(playerItemAllowUrl, parameters);
+	}
+	
 	public void setAllPlayerItemsAllow() {
-	    // TODO Auto-generated method stub
-	    
-    }
-
+		StringBuilder ids = new StringBuilder();
+		for (PlayerItem playerItem : playerItemRepository.getItemsById(playerRepository.list().iterator().next().getPlayerid())) {
+			ids.append(playerItem.getId()).append(",");
+		}
+		if (ids.length() > 0) ids.deleteCharAt(ids.length() - 1);
+		for (Player player : playerRepository.list()) {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("playerid", player.getPlayerid());
+			parameters.put("fund_ids", ids.toString());
+			parameters.put("allow", 1);
+			httpClientService.executePostService(playerItemAllowsUrl, parameters);
+		}
+	}
+	
 	public void setAllPlayerItemsDisallow() {
-	    // TODO Auto-generated method stub
-	    
-    }
+		StringBuilder ids = new StringBuilder();
+		for (PlayerItem playerItem : playerItemRepository.getItemsById(playerRepository.list().iterator().next().getPlayerid())) {
+			ids.append(playerItem.getId()).append(",");
+		}
+		if (ids.length() > 0) ids.deleteCharAt(ids.length() - 1);
+		for (Player player : playerRepository.list()) {
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("playerid", player.getPlayerid());
+			parameters.put("fund_ids", ids.toString());
+			parameters.put("allow", 2);
+			httpClientService.executePostService(playerItemAllowsUrl, parameters);
+		}
+	}
+	
 }
