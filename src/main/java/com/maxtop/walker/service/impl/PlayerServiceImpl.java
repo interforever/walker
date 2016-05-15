@@ -127,7 +127,7 @@ public class PlayerServiceImpl implements PlayerService {
 		if (parameters.containsKey("lat")) paramMap.put("lat", (String) parameters.get("lat"));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = (Map<String, Object>) httpClientService.executeGetService(playerAddUrl, paramMap);
-		if (!"0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
+		if (!"0.0".equals(result.get("code").toString())) throw new RuntimeException((String) result.get("msg"));
 		playerRepository.refresh();
 		playerItemRepository.refresh();
 	}

@@ -40,9 +40,6 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 			logger.info("Refreshing player items failed!");
 		} else {
 			List<PlayerItem> palyerItems = playerItemDao.getPlayerItems();
-			for (Map.Entry<String, List<PlayerItem>> entry : playerItemsMap.entrySet()) {
-				this.playerItemsMap.put(entry.getKey(), entry.getValue());
-			}
 			for (PlayerItem playerItem : palyerItems) {
 				if (playerItemsMap.get(playerItem.getPlayerid()) == null) continue;
 				for (PlayerItem item : playerItemsMap.get(playerItem.getPlayerid())) {
@@ -51,6 +48,9 @@ public class PlayerItemRepository implements InitializingBean, DisposableBean {
 						break;
 					}
 				}
+			}
+			for (Map.Entry<String, List<PlayerItem>> entry : playerItemsMap.entrySet()) {
+				this.playerItemsMap.put(entry.getKey(), entry.getValue());
 			}
 			logger.info("Refreshing " + playerItemsMap.size() + " players' items successfully!");
 		}

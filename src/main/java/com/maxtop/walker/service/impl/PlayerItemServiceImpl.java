@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +60,7 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 		for (PlayerItem playerItem : playerItemRepository.getItemsById(playerRepository.list().iterator().next().getPlayerid())) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("title", playerItem.getTitle());
-			map.put("id", playerItem.getId());
+			map.put("id", playerItem.getId().toString());
 			maps.add(map);
 		}
 		return maps;
@@ -73,14 +74,16 @@ public class PlayerItemServiceImpl implements PlayerItemService {
 		List<Map<String, Object>> itemMaps = (List<Map<String, Object>>) map.get("data");
 		List<Map<String, Object>> allowMaps = new ArrayList<Map<String, Object>>();
 		for (Map<String, Object> itemMap : itemMaps) {
-			String id = (String) itemMap.get("id");
+			String id = String.valueOf(((Number) itemMap.get("id")).intValue());
 			@SuppressWarnings("unchecked")
 			Map<String, String> allowInfo = (Map<String, String>) itemMap.get("allow_info");
-			Map<String, Object> allowMap = new HashMap<String, Object>();
-			allowMap.put("id", id);
-			allowMap.put("playerid", allowInfo.keySet().iterator().next());
-			allowMap.put("allow", allowInfo.values().iterator().next());
-			allowMaps.add(allowMap);
+			for (Entry<String, String> entry : allowInfo.entrySet()) {
+				Map<String, Object> allowMap = new HashMap<String, Object>();
+				allowMap.put("id", id);
+				allowMap.put("playerid", entry.getKey());
+				allowMap.put("allow", entry.getValue());
+				allowMaps.add(allowMap);
+			}
 		}
 		return allowMaps;
 	}
