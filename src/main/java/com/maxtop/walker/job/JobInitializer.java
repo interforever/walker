@@ -27,8 +27,8 @@ public class JobInitializer implements InitializingBean, DisposableBean {
 	private Scheduler scheduler;
 	
 	public void afterPropertiesSet() throws Exception {
-		createJob(RefreshJob.class, "refreshTrigger", refreshInterval);
-		createJob(SubmitCoordinateJob.class, "submitCoordinateTrigger", submitCoordinateInterval);
+//		createJob(RefreshJob.class, "refreshTrigger", refreshInterval);
+//		createJob(SubmitCoordinateJob.class, "submitCoordinateTrigger", submitCoordinateInterval);
 	}
 	
 	public void destroy() throws Exception {

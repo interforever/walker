@@ -75,7 +75,7 @@ public class PlayerRepository implements InitializingBean, DisposableBean {
 	}
 	
 	public void afterPropertiesSet() throws Exception {
-		refresh();
+//		refresh();
 	}
 	
 }
