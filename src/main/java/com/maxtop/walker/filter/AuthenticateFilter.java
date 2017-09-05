@@ -65,18 +65,18 @@ public class AuthenticateFilter implements Filter {
 				}
 			}
 		}
-		if (username == null && !"cspjddsw8dwcnzz18d".equals(cnmlgb)) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("code", HttpStatus.UNAUTHORIZED.value());
-			map.put("msg", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-			String json = gson.toJson(map);
-			responseSetting(response);
-			PrintWriter out = response.getWriter();
-			out.println(json);
-			out.flush();
-			out.close();
-			return;
-		}
+		//		if (username == null && !"cspjddsw8dwcnzz18d".equals(cnmlgb)) {
+		//			Map<String, Object> map = new HashMap<String, Object>();
+		//			map.put("code", HttpStatus.UNAUTHORIZED.value());
+		//			map.put("msg", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+		//			String json = gson.toJson(map);
+		//			responseSetting(response);
+		//			PrintWriter out = response.getWriter();
+		//			out.println(json);
+		//			out.flush();
+		//			out.close();
+		//			return;
+		//		}
 		filterChain.doFilter(req, res);
 	}
 	

@@ -1,6 +1,10 @@
 
 package com.maxtop.walker.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +24,7 @@ import com.maxtop.walker.model.Player.Role;
 import com.maxtop.walker.model.VisibleSetting;
 import com.maxtop.walker.service.PlayerService;
 
+@Api(value = "/map", description = "map")
 @RestController
 @RequestMapping(value = "/map")
 public class MapController {
@@ -33,8 +38,9 @@ public class MapController {
 	@Autowired
 	private VisibleSettingRepository visibleSettingRepository;
 	
+	@ApiOperation(value = "getMapElements")
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.GET)
-	public Map<String, Object> getMapElements(@PathVariable String playerid) {
+	public Map<String, Object> getMapElements(@ApiParam @PathVariable String playerid) {
 		List<Map<String, Object>> elements = new ArrayList<Map<String, Object>>();
 		for (Player player : playerRepository.list()) {
 			Role role = Player.Role.getByName(player.getRole());
@@ -58,8 +64,9 @@ public class MapController {
 		return map;
 	}
 	
+	@ApiOperation(value = "updateMapElement")
 	@RequestMapping(value = "/{playerid}", method = RequestMethod.POST)
-	public void updateMapElement(@PathVariable String playerid, @RequestBody Map<String, Object> parameters) {
+	public void updateMapElement(@ApiParam @PathVariable String playerid, @ApiParam @RequestBody Map<String, Object> parameters) {
 		playerService.update(playerid, parameters);
 	}
 	

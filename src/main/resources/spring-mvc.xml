@@ -12,28 +12,36 @@
 
 	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
 	<context:component-scan base-package="com.maxtop.walker.controller" />
-	
+
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
 			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-		    	<constructor-arg value="UTF-8" />
+				<constructor-arg value="UTF-8" />
 			</bean>
 			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
-			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="prettyPrint" value="true"/>
-                <property name="objectMapper">
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="prettyPrint" value="true" />
+				<property name="objectMapper">
 					<bean class="com.maxtop.walker.core.json.ObjectMapperWrapper">
 						<property name="serializerFactory">
-							<bean class="com.maxtop.walker.core.json.BeanSerializerFactoryWrapper"/>
+							<bean class="com.maxtop.walker.core.json.BeanSerializerFactoryWrapper" />
 						</property>
 						<property name="serializerProvider">
-							<bean class="com.maxtop.walker.core.json.SerializerProviderWrapper"/>
+							<bean class="com.maxtop.walker.core.json.SerializerProviderWrapper" />
 						</property>
 					</bean>
 				</property>
-            </bean>			
-  		</mvc:message-converters>
+			</bean>
+		</mvc:message-converters>
 	</mvc:annotation-driven>
+
+	<!-- swagger配置 -->
+	<bean class="com.maxtop.walker.swagger.SwaggerConfig" />
+	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
+	<mvc:resources mapping="favicon.ico" location="/favicon.ico" />
+	<mvc:resources mapping="/webjars/**"
+		location="classpath:/META-INF/resources/webjars/" />
 
 </beans>
